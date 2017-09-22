@@ -345,6 +345,10 @@
 		7185C5DE1F7517BC00CF516A /* NR7.json in Resources */ = {isa = PBXBuildFile; fileRef = 7185C4941F7517BC00CF516A /* NR7.json */; };
 		7185C5DF1F7517BC00CF516A /* NR8.json in Resources */ = {isa = PBXBuildFile; fileRef = 7185C4951F7517BC00CF516A /* NR8.json */; };
 		7185C5E01F7517BC00CF516A /* RWS8.json in Resources */ = {isa = PBXBuildFile; fileRef = 7185C4961F7517BC00CF516A /* RWS8.json */; };
+		7185C5E21F754B7F00CF516A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185C5E11F754B7F00CF516A /* MapViewController.swift */; };
+		7185C5EA1F754C6000CF516A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7185C5E91F754C6000CF516A /* MapKit.framework */; };
+		7185C5EC1F75524B00CF516A /* MapViewController+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185C5EB1F75524B00CF516A /* MapViewController+UI.swift */; };
+		7185C5EE1F7553DF00CF516A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185C5ED1F7553DF00CF516A /* Colors.swift */; };
 		D62203AA1271DBE492F9FA5D /* Pods_Busz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */; };
 /* End PBXBuildFile section */
 
@@ -690,6 +694,10 @@
 		7185C4941F7517BC00CF516A /* NR7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = NR7.json; path = Data/NR7.json; sourceTree = "<group>"; };
 		7185C4951F7517BC00CF516A /* NR8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = NR8.json; path = Data/NR8.json; sourceTree = "<group>"; };
 		7185C4961F7517BC00CF516A /* RWS8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = RWS8.json; path = Data/RWS8.json; sourceTree = "<group>"; };
+		7185C5E11F754B7F00CF516A /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		7185C5E91F754C6000CF516A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		7185C5EB1F75524B00CF516A /* MapViewController+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MapViewController+UI.swift"; sourceTree = "<group>"; };
+		7185C5ED1F7553DF00CF516A /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD97225603DBDA1DC6EBAB2 /* Pods-Busz.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busz.release.xcconfig"; path = "Pods/Target Support Files/Pods-Busz/Pods-Busz.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -699,6 +707,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7185C5EA1F754C6000CF516A /* MapKit.framework in Frameworks */,
 				D62203AA1271DBE492F9FA5D /* Pods_Busz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -709,6 +718,7 @@
 		2C4C5F1B22AEB41AB47E8A68 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7185C5E91F754C6000CF516A /* MapKit.framework */,
 				CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */,
 			);
 			name = Frameworks;
@@ -740,6 +750,9 @@
 				7185BE171F74C97800CF516A /* APIClient.swift */,
 				7185BE191F74EA8400CF516A /* FileReader.swift */,
 				7185BE1D1F7500A600CF516A /* Bus.swift */,
+				7185C5E11F754B7F00CF516A /* MapViewController.swift */,
+				7185C5EB1F75524B00CF516A /* MapViewController+UI.swift */,
+				7185C5ED1F7553DF00CF516A /* Colors.swift */,
 				7185BE091F74C7FB00CF516A /* Main.storyboard */,
 				7185BE0C1F74C7FB00CF516A /* Assets.xcassets */,
 				7185BE0E1F74C7FB00CF516A /* LaunchScreen.storyboard */,
@@ -1133,6 +1146,11 @@
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 7F4QLBXH7S;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1559,6 +1577,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7185BE081F74C7FB00CF516A /* ViewController.swift in Sources */,
+				7185C5EE1F7553DF00CF516A /* Colors.swift in Sources */,
+				7185C5EC1F75524B00CF516A /* MapViewController+UI.swift in Sources */,
+				7185C5E21F754B7F00CF516A /* MapViewController.swift in Sources */,
 				7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */,
 				7185BE181F74C97800CF516A /* APIClient.swift in Sources */,
 				7185BE1A1F74EA8400CF516A /* FileReader.swift in Sources */,
