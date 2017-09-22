@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import CoreLocation
 
 class FileReader{
     static let share = FileReader()
@@ -75,7 +76,22 @@ class FileReader{
     func busStops() -> Observable<[String : Any]>{
         return requestFile(name: busStopsEndpoint).shareReplay(1)
     }
-
-
+    
+    func routeFor(bus: Bus) -> Observable<Bus>{
+        return requestFile(name: bus.busNumber).map { data -> Bus in
+            var updatedBus = bus
+            if let route1 = data["1"] as? [String : Any], let route = route1["route"] as? [String], let busStops = route1["stops"] as? [String] {
+                _ = busStops.map({ stop -> Void in
+                    updatedBus.busStops.append(stop)
+                })
+                _ = route.map({ coordinateString -> Void in
+                    let coodinate = coordinateString.components(separatedBy: ",")
+                    let coordinateTuple = (CLLocationDegrees(coodinate[0])!, CLLocationDegrees(coodinate[1])!)
+                    updatedBus.routes.append(coordinateTuple)
+                })
+            }
+            return bus
+        }
+    }
     
 }

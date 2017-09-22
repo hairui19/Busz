@@ -7,12 +7,15 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct Bus {
     let busNumber : String
     let direction : Int
     let provider : String
     let type : BusType
+    var routes : Array<(CLLocationDegrees , CLLocationDegrees)> = []
+    var busStops : Array<String> = []
     
     enum BusType {
         case trunkBusServices
