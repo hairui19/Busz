@@ -15,7 +15,7 @@ extension MapViewController{
         setPicker()
     }
     
-    func setWhiteBox(){
+    fileprivate func setWhiteBox(){
         whiteBox.layer.cornerRadius = 10
         whiteBox.layer.shadowColor = UIColor.lightGray.cgColor
         whiteBox.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -23,7 +23,7 @@ extension MapViewController{
         whiteBox.layer.shadowOpacity = 1
     }
     
-    func setPicker(){
+    fileprivate func setPicker(){
         destinationPicker.delegate = self
         destinationPicker.dataSource = self
     }
