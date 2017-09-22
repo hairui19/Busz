@@ -16,10 +16,9 @@ class ViewController: UIViewController {
     private let fileReader = FileReader.share
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let file = Bundle.main.path(forResource: "1N", ofType: "json") else{
-            print("cannot read anything")
-            return
-        }
+        fileReader.busServices()
+            .debug()
+            .subscribe()
     }
 }
 

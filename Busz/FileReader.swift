@@ -24,15 +24,11 @@ class FileReader{
     
     private func requestFile(name:String, type : String = "json") -> Observable<[String : Any]>{
         do{
-            guard let filename = Bundle.main.path(forResource: name, ofType: type),
-                let url = URL(string: filename) else{
+            guard let filename = Bundle.main.url(forResource: name, withExtension: type) else{
                     throw FileReaderError.invalidFilename(name)
             }
-            
-            let data = try Data(contentsOf: url)
-            
+            let data = try Data(contentsOf: filename)
             guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),let result = jsonObject as? [String : Any] else{
-             
                 throw FileReaderError.invalidData
             }
             return Observable<[String : Any]>.just(result)
