@@ -78,12 +78,19 @@ class FileReader{
     }
     
     func routeFor(bus: Bus) -> Observable<Bus>{
-        return requestFile(name: bus.busNumber).map { data -> Bus in
+        return requestFile(name: bus.busNumber).map { [weak self] data -> Bus in
             var updatedBus = bus
-            if let route1 = data["1"] as? [String : Any], let route = route1["route"] as? [String], let busStops = route1["stops"] as? [String] {
-                _ = busStops.map({ stop -> Void in
-                    updatedBus.busStops.append(stop)
+            if let route1 = data["1"] as? [String : Any], let route = route1["route"] as? [String], let busStopCodes = route1["stops"] as? [String] {
+                
+                _ = self?.busStops().map({ busStopsDic -> Void in
+                    _ = busStopCodes.map({ stopCode -> Void in
+                        let busStopInfo = busStopsDic[stopCode] as? [String : Any]
+                        if let busStop = BusStop(busStopCode: stopCode, busStopInfo: busStopInfo!){
+                            updatedBus.busStops.append(busStop)
+                        }
+                    })
                 })
+                
                 _ = route.map({ coordinateString -> Void in
                     let coodinate = coordinateString.components(separatedBy: ",")
                     let coordinateTuple = (CLLocationDegrees(coodinate[0])!, CLLocationDegrees(coodinate[1])!)

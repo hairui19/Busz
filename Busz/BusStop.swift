@@ -14,4 +14,18 @@ struct BusStop {
     let coordinate : (CLLocationDegrees, CLLocationDegrees)
     let name : String
     
+    
+    init?(busStopCode : String, busStopInfo : [String : Any]) {
+        guard let coordinateStr = busStopInfo["coords"] as? String, let name = busStopInfo["name"] as? String else{
+            return nil
+        }
+        let coordinateArray = coordinateStr.components(separatedBy: ",")
+        guard let altitude = CLLocationDegrees(coordinateArray[0]),
+            let longitude = CLLocationDegrees(coordinateArray[1]) else{
+                return nil
+        }
+        self.busStopCode = busStopCode
+        self.name = name
+        self.coordinate = (altitude,longitude)
+    }
 }
