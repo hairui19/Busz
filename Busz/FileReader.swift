@@ -21,7 +21,6 @@ class FileReader{
     private let busServicesEndpoint = "bus-services"
     private let busStopsServicesEndpoint = "bus-stops-services"
     private let busStopsEndpoint = "bus-stops"
-    
     private func requestFile(name:String, type : String = "json") -> Observable<[String : Any]>{
         do{
             guard let filename = Bundle.main.url(forResource: name, withExtension: type) else{
@@ -31,7 +30,7 @@ class FileReader{
             guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),let result = jsonObject as? [String : Any] else{
                 throw FileReaderError.invalidData
             }
-            return Observable<[String : Any]>.just(result)
+            return Observable<[String : Any]>.just(result).shareReplay(1)
             
         }catch FileReaderError.invalidData{
             print("data")
@@ -57,21 +56,26 @@ class FileReader{
                 let niteBusesArray = dataDic[niteBuses] as? [[String : Any]] else{
                     return allBuses
             }
-            
             allBuses += trunkBusesArray.flatMap({ json -> Bus? in
                 return Bus.init(json: json, busType:feederBuses)
             })
-            
             allBuses += feederBusesArray.flatMap({ json -> Bus? in
                 return Bus.init(json: json, busType:trunkBuses)
             })
-            
             allBuses += niteBusesArray.flatMap({ json -> Bus? in
                 return Bus.init(json: json, busType:niteBuses)
             })
-            
-            return allBuses
+            return allBuses.sorted(by: { (bus1, bus2) -> Bool in
+                return bus1.busNumber.localizedStandardCompare(bus2.busNumber) == .orderedAscending
+            })
         }
+        .shareReplay(1)
     }
+    
+    func busStops() -> Observable<[String : Any]>{
+        return requestFile(name: busStopsEndpoint).shareReplay(1)
+    }
+
+
     
 }

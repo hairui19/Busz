@@ -16,9 +16,6 @@ class ViewController: UIViewController {
     private let fileReader = FileReader.share
     override func viewDidLoad() {
         super.viewDidLoad()
-        fileReader.busServices()
-            .debug()
-            .subscribe()
     }
 }
 
