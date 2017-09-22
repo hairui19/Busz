@@ -15,6 +15,7 @@ class MapViewController: UIViewController {
 
     // MARK : - Properties
     fileprivate let dummyData = ["1", "2", "3", "4"]
+    fileprivate let disposeBag = DisposeBag()
     
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -30,6 +31,7 @@ class MapViewController: UIViewController {
         setupUI()
         addNotifications()
         addTapToDismissEditingGesture()
+        bindingUItoRx()
     }
     
     // MARK : IBActions. 
@@ -38,6 +40,44 @@ class MapViewController: UIViewController {
     
     deinit {
         removeNotifications()
+    }
+}
+
+//MAR : - RxSwift and Bidning 
+extension MapViewController{
+    func bindingUItoRx(){
+        (destinationTextfield.rx.text).asObservable()
+            .filter{ return ($0 ?? "").characters.count > 0 }
+            
+            .map { [weak self] searchText -> Int in
+                return self!.getRowForSearchText(searchText: searchText!)
+            }
+            .filter { rowIndex -> Bool in
+                if rowIndex < 0 {
+                    return false
+                }
+                return true
+            }
+            .debug()
+            .subscribe(onNext: {[weak self] rowIndex in
+                self!.destinationPicker.selectRow(rowIndex, inComponent: 0, animated: true)
+            })
+            .addDisposableTo(disposeBag)
+        
+        
+        
+    }
+    
+    func getRowForSearchText(searchText : String) -> Int{
+        var index = 0
+        for data in dummyData{
+            if data.lowercased().range(of: searchText.lowercased()) != nil {
+                return index
+            }else{
+                index += 1
+            }
+        }
+        return -1
     }
 }
 
@@ -84,6 +124,10 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return dummyData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        destinationTextfield.text = dummyData[row]
     }
 
 }
