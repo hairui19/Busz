@@ -13,7 +13,7 @@ import RxSwift
 
 class MapViewController: UIViewController {
 
-    // MARK : - Properties
+    // MARK: - Properties
     fileprivate let dummyData = ["1", "2", "3", "4"]
     fileprivate let disposeBag = DisposeBag()
     
@@ -25,7 +25,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var whiteBoxBottomContraint: NSLayoutConstraint!
     
     
-    // MARK : - Life Cycle Functions
+    // MARK: - Life Cycle Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -34,37 +34,42 @@ class MapViewController: UIViewController {
         bindingUItoRx()
     }
     
-    // MARK : IBActions. 
+    // MARK: IBActions.
     @IBAction func setAlarmButtonPressed(_ sender: UIButton) {
     }
     
     deinit {
         removeNotifications()
     }
+    
+    
+    // MARK: - Animation Function
+    fileprivate func addAnimation(animationTime : TimeInterval, layoutChanges : @escaping ()->()){
+        UIView.animate(withDuration: animationTime) {
+            layoutChanges()
+        }
+    }
+
 }
 
-//MAR : - RxSwift and Bidning 
+//MARK: - RxSwift and Bidning
 extension MapViewController{
     func bindingUItoRx(){
-        (destinationTextfield.rx.text).asObservable()
+        (destinationTextfield.rx.text)
+            .asObservable()
             .filter{ return ($0 ?? "").characters.count > 0 }
             
             .map { [weak self] searchText -> Int in
                 return self!.getRowForSearchText(searchText: searchText!)
             }
             .filter { rowIndex -> Bool in
-                if rowIndex < 0 {
-                    return false
-                }
+                if rowIndex < 0 {return false}
                 return true
             }
-            .debug()
             .subscribe(onNext: {[weak self] rowIndex in
                 self!.destinationPicker.selectRow(rowIndex, inComponent: 0, animated: true)
             })
             .addDisposableTo(disposeBag)
-        
-        
         
     }
     
@@ -82,7 +87,7 @@ extension MapViewController{
 }
 
 
-// MARK : - NotificationCentre Functions
+// MARK: - NotificationCentre Functions
 extension MapViewController{
     fileprivate func addNotifications(){
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow , object: nil)
@@ -93,12 +98,17 @@ extension MapViewController{
     }
     func keyboardWillShow(notification : NSNotification){
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
-            whiteBoxBottomContraint.constant = keyboardSize.height + 3
+            addAnimation(animationTime : 0.5, layoutChanges: { [weak self] in
+                self?.whiteBoxBottomContraint.constant = keyboardSize.height + 5
+                self?.view.layoutIfNeeded()
+                
+            })
+            
         }
     }
 }
 
-// MARK : - Gesture Functions
+// MARK: - Gesture Functions
 extension MapViewController{
     fileprivate func addTapToDismissEditingGesture(){
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapToEndEditing))
@@ -107,13 +117,17 @@ extension MapViewController{
     
     func tapToEndEditing(){
         if destinationTextfield.isFirstResponder {
-            whiteBoxBottomContraint.constant = 30
+            addAnimation(animationTime: 0.4, layoutChanges: { [weak self] in
+                self?.whiteBoxBottomContraint.constant = 30
+                self?.view.layoutIfNeeded()
+
+            })
             view.endEditing(true)
         }
     }
 }
 
-//MARK : - UIPickerDelegate and UIPickerDataSource
+//MARK: - UIPickerDelegate and UIPickerDataSource
 extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
