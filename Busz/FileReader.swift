@@ -73,32 +73,32 @@ class FileReader{
         .shareReplay(1)
     }
     
-    func busStops() -> Observable<[String : Any]>{
+     func busStops() -> Observable<[String : Any]>{
         return requestFile(name: busStopsEndpoint).shareReplay(1)
     }
     
     func routeFor(bus: Bus) -> Observable<Bus>{
-        return requestFile(name: bus.busNumber).map { [weak self] data -> Bus in
+        let busStopsObservable = self.busStops()
+        let routeObservable = requestFile(name: bus.busNumber)
+        return Observable.combineLatest(busStopsObservable, routeObservable) {busStopsDic, routeData -> Bus in
             var updatedBus = bus
-            if let route1 = data["1"] as? [String : Any], let route = route1["route"] as? [String], let busStopCodes = route1["stops"] as? [String] {
-                
-                _ = self?.busStops().map({ busStopsDic -> Void in
-                    _ = busStopCodes.map({ stopCode -> Void in
-                        let busStopInfo = busStopsDic[stopCode] as? [String : Any]
-                        if let busStop = BusStop(busStopCode: stopCode, busStopInfo: busStopInfo!){
-                            updatedBus.busStops.append(busStop)
-                        }
-                    })
+            if let route1 = routeData["1"] as? [String : Any], let route = route1["route"] as? [String], let busStopCodes = route1["stops"] as? [String] {
+                _ = busStopCodes.map({ stopCode -> Void in
+                    let busStopInfo = busStopsDic[stopCode] as? [String : Any]
+                    if let busStop = BusStop(busStopCode: stopCode, busStopInfo: busStopInfo!){
+                        updatedBus.busStops.append(busStop)
+                    }
                 })
-                
                 _ = route.map({ coordinateString -> Void in
                     let coodinate = coordinateString.components(separatedBy: ",")
                     let coordinateTuple = (CLLocationDegrees(coodinate[0])!, CLLocationDegrees(coodinate[1])!)
                     updatedBus.routes.append(coordinateTuple)
                 })
             }
-            return bus
+            
+            return updatedBus
         }
+        
     }
     
 }

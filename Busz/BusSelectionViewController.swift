@@ -68,8 +68,10 @@ extension BusSelectionViewController : UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedCell = collectionView.cellForItem(at: indexPath) as! BusSelectionCell
-        let busName = selectedCell.busNumberLabel.text!
+        let bus = buses.value[indexPath.row]
+        fileReader.busStops().subscribe()
+        fileReader.routeFor(bus: bus)
+            .subscribe()
        
     }
 }
