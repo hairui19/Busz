@@ -57,6 +57,16 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="59S-jC-Nl4">
+                                        <rect key="frame" x="85" y="58" width="80" height="35"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="Set Alarm">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setAlarmButtonPressed:" destination="UQT-8w-z8u" eventType="touchUpInside" id="yfb-uJ-486"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -66,9 +76,12 @@
                                     <constraint firstItem="ns0-nU-BSj" firstAttribute="top" secondItem="5xx-h3-1Fy" secondAttribute="top" constant="2" id="7AT-E5-kP1"/>
                                     <constraint firstItem="Cn1-qx-5tu" firstAttribute="leading" secondItem="5xx-h3-1Fy" secondAttribute="leading" constant="10" id="B0a-Hk-MSf"/>
                                     <constraint firstItem="ns0-nU-BSj" firstAttribute="leading" secondItem="5xx-h3-1Fy" secondAttribute="leading" constant="10" id="B8c-8e-VFl"/>
+                                    <constraint firstAttribute="bottom" secondItem="59S-jC-Nl4" secondAttribute="bottom" constant="7" id="Cke-NL-Xfe"/>
                                     <constraint firstAttribute="trailing" secondItem="Cn1-qx-5tu" secondAttribute="trailing" constant="10" id="P57-Fc-XUv"/>
+                                    <constraint firstItem="59S-jC-Nl4" firstAttribute="top" secondItem="Cn1-qx-5tu" secondAttribute="bottom" constant="7" id="ZyH-1U-esO"/>
                                     <constraint firstAttribute="trailing" secondItem="ns0-nU-BSj" secondAttribute="trailing" constant="10" id="i8l-IU-ZBj"/>
                                     <constraint firstAttribute="height" constant="100" id="kS4-Gr-PUU"/>
+                                    <constraint firstItem="59S-jC-Nl4" firstAttribute="centerX" secondItem="5xx-h3-1Fy" secondAttribute="centerX" id="pWh-Bz-NWU"/>
                                 </constraints>
                             </view>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Swt-ii-4TO">
@@ -77,23 +90,14 @@
                                     <constraint firstAttribute="height" constant="85" id="PkT-uD-TEk"/>
                                 </constraints>
                             </pickerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="59S-jC-Nl4">
-                                <rect key="frame" x="153.5" y="598" width="67" height="30"/>
-                                <state key="normal" title="Set Alarm"/>
-                                <connections>
-                                    <action selector="setAlarmButtonPressed:" destination="UQT-8w-z8u" eventType="touchUpInside" id="yfb-uJ-486"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="pPZ-ys-WAr" firstAttribute="top" secondItem="5xx-h3-1Fy" secondAttribute="bottom" constant="30" id="5YY-i7-nu9"/>
-                            <constraint firstItem="59S-jC-Nl4" firstAttribute="top" secondItem="Cn1-qx-5tu" secondAttribute="bottom" constant="10" id="B3R-hu-O1D"/>
                             <constraint firstItem="Swt-ii-4TO" firstAttribute="trailing" secondItem="5xx-h3-1Fy" secondAttribute="trailing" id="D7M-o6-oCH"/>
                             <constraint firstItem="Mu7-au-mky" firstAttribute="leading" secondItem="hC9-Oo-VHw" secondAttribute="leading" id="FLM-BB-AOu"/>
                             <constraint firstItem="5xx-h3-1Fy" firstAttribute="top" secondItem="Swt-ii-4TO" secondAttribute="bottom" constant="1" id="Kvf-fZ-N6U"/>
                             <constraint firstItem="Swt-ii-4TO" firstAttribute="leading" secondItem="5xx-h3-1Fy" secondAttribute="leading" id="MwT-sX-w4p"/>
-                            <constraint firstItem="59S-jC-Nl4" firstAttribute="centerX" secondItem="hC9-Oo-VHw" secondAttribute="centerX" id="OfC-tl-Okd"/>
                             <constraint firstItem="pPZ-ys-WAr" firstAttribute="top" secondItem="Mu7-au-mky" secondAttribute="bottom" id="QMh-zV-SQD"/>
                             <constraint firstItem="Mu7-au-mky" firstAttribute="top" secondItem="Qwi-9f-Jzy" secondAttribute="bottom" id="TfL-mY-cRZ"/>
                             <constraint firstItem="5xx-h3-1Fy" firstAttribute="centerX" secondItem="hC9-Oo-VHw" secondAttribute="centerX" id="ayn-5w-Yuv"/>
@@ -102,8 +106,10 @@
                     </view>
                     <connections>
                         <outlet property="destinationPicker" destination="Swt-ii-4TO" id="oTQ-cp-t7y"/>
+                        <outlet property="destinationTextfield" destination="ns0-nU-BSj" id="Toh-Jj-Box"/>
                         <outlet property="mapView" destination="Mu7-au-mky" id="dqH-xk-a4M"/>
                         <outlet property="whiteBox" destination="5xx-h3-1Fy" id="T74-Ci-twW"/>
+                        <outlet property="whiteBoxBottomContraint" destination="5YY-i7-nu9" id="evT-Hz-Lt2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i6d-ZC-DNW" userLabel="First Responder" sceneMemberID="firstResponder"/>

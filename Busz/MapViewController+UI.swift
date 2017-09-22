@@ -12,6 +12,7 @@ import UIKit
 extension MapViewController{
     func setupUI(){
         setWhiteBox()
+        setPicker()
     }
     
     func setWhiteBox(){
@@ -21,4 +22,10 @@ extension MapViewController{
         whiteBox.layer.shadowRadius = 5;
         whiteBox.layer.shadowOpacity = 1
     }
+    
+    func setPicker(){
+        destinationPicker.delegate = self
+        destinationPicker.dataSource = self
+    }
+    
 }
