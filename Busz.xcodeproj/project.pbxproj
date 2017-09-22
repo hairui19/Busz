@@ -13,6 +13,9 @@
 		7185BE0D1F74C7FB00CF516A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7185BE0C1F74C7FB00CF516A /* Assets.xcassets */; };
 		7185BE101F74C7FB00CF516A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7185BE0E1F74C7FB00CF516A /* LaunchScreen.storyboard */; };
 		7185BE181F74C97800CF516A /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE171F74C97800CF516A /* APIClient.swift */; };
+		7185BE1A1F74EA8400CF516A /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE191F74EA8400CF516A /* FileReader.swift */; };
+		7185BE1C1F74FE2200CF516A /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 7185BE1B1F74FE2200CF516A /* Data */; };
+		7185BE1E1F7500A600CF516A /* Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE1D1F7500A600CF516A /* Bus.swift */; };
 		D62203AA1271DBE492F9FA5D /* Pods_Busz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +29,9 @@
 		7185BE0F1F74C7FB00CF516A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7185BE111F74C7FB00CF516A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7185BE171F74C97800CF516A /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		7185BE191F74EA8400CF516A /* FileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
+		7185BE1B1F74FE2200CF516A /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
+		7185BE1D1F7500A600CF516A /* Bus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bus.swift; sourceTree = "<group>"; };
 		CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD97225603DBDA1DC6EBAB2 /* Pods-Busz.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busz.release.xcconfig"; path = "Pods/Target Support Files/Pods-Busz/Pods-Busz.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,10 +80,13 @@
 				7185BE051F74C7FB00CF516A /* AppDelegate.swift */,
 				7185BE071F74C7FB00CF516A /* ViewController.swift */,
 				7185BE171F74C97800CF516A /* APIClient.swift */,
+				7185BE191F74EA8400CF516A /* FileReader.swift */,
+				7185BE1D1F7500A600CF516A /* Bus.swift */,
 				7185BE091F74C7FB00CF516A /* Main.storyboard */,
 				7185BE0C1F74C7FB00CF516A /* Assets.xcassets */,
 				7185BE0E1F74C7FB00CF516A /* LaunchScreen.storyboard */,
 				7185BE111F74C7FB00CF516A /* Info.plist */,
+				7185BE1B1F74FE2200CF516A /* Data */,
 			);
 			path = Busz;
 			sourceTree = "<group>";
@@ -156,6 +165,7 @@
 			files = (
 				7185BE101F74C7FB00CF516A /* LaunchScreen.storyboard in Resources */,
 				7185BE0D1F74C7FB00CF516A /* Assets.xcassets in Resources */,
+				7185BE1C1F74FE2200CF516A /* Data in Resources */,
 				7185BE0B1F74C7FB00CF516A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,6 +236,8 @@
 				7185BE081F74C7FB00CF516A /* ViewController.swift in Sources */,
 				7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */,
 				7185BE181F74C97800CF516A /* APIClient.swift in Sources */,
+				7185BE1A1F74EA8400CF516A /* FileReader.swift in Sources */,
+				7185BE1E1F7500A600CF516A /* Bus.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +403,7 @@
 				7185BE161F74C7FB00CF516A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

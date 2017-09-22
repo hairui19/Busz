@@ -7,19 +7,19 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ViewController: UIViewController {
 
+    //private let apiClient = APIClient.share
+    private let fileReader = FileReader.share
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        guard let file = Bundle.main.path(forResource: "1N", ofType: "json") else{
+            print("cannot read anything")
+            return
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
 }
 
