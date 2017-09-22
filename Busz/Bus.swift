@@ -15,7 +15,7 @@ struct Bus {
     let provider : String
     let type : BusType
     var routes : Array<(CLLocationDegrees , CLLocationDegrees)> = []
-    var busStops : Array<String> = []
+    var busStops : Array<BusStop> = []
     
     enum BusType {
         case trunkBusServices
