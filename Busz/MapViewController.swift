@@ -17,6 +17,9 @@ class MapViewController: UIViewController {
     fileprivate let dummyData = ["1", "2", "3", "4"]
     fileprivate let disposeBag = DisposeBag()
     
+    //input
+    var bus : Bus!
+    
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var destinationPicker: UIPickerView!

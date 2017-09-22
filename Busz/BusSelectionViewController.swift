@@ -69,9 +69,9 @@ extension BusSelectionViewController : UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bus = buses.value[indexPath.row]
-        fileReader.busStops().subscribe()
-        fileReader.routeFor(bus: bus)
-            .subscribe()
+        let mapViewController = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
+        mapViewController.bus = bus
+        self.navigationController?.pushViewController(mapViewController, animated: true)
        
     }
 }
