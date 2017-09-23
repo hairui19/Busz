@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ok whatever</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Busz</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Busz requires access to your phone&apos;s location to notify you when your bus reaches its destination</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
