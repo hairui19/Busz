@@ -14,8 +14,9 @@ import RxSwift
 class MapViewController: UIViewController {
 
     // MARK: - Properties
-    fileprivate let dummyData = ["1", "2", "3", "4"]
+    fileprivate let destinations = Variable<[String]>([])
     fileprivate let disposeBag = DisposeBag()
+    fileprivate let fileReader = FileReader()
     
     //input
     var bus : Bus!
@@ -31,6 +32,7 @@ class MapViewController: UIViewController {
     // MARK: - Life Cycle Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
         setupUI()
         addNotifications()
         addTapToDismissEditingGesture()
@@ -51,6 +53,11 @@ class MapViewController: UIViewController {
         UIView.animate(withDuration: animationTime) {
             layoutChanges()
         }
+    }
+    
+    // MARK: - Helper Functions
+    fileprivate func loadData(){
+        
     }
 
 }
@@ -74,11 +81,19 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
+        fileReader.routeFor(bus: bus).map { bus -> [String] in
+            return bus.busStops.map({ (busStop) -> String in
+                return busStop.name
+            })
+        }
+        .bind(to: destinations)
+        .addDisposableTo(disposeBag)
+        
     }
     
     func getRowForSearchText(searchText : String) -> Int{
         var index = 0
-        for data in dummyData{
+        for data in destinations.value{
             if data.lowercased().range(of: searchText.lowercased()) != nil {
                 return index
             }else{
@@ -136,15 +151,15 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
         return 1
     }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return dummyData.count
+        return destinations.value.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return dummyData[row]
+        return destinations.value[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        destinationTextfield.text = dummyData[row]
+        destinationTextfield.text = destinations.value[row]
     }
 
 }

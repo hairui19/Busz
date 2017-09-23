@@ -755,18 +755,7 @@
 		7185BE041F74C7FB00CF516A /* Busz */ = {
 			isa = PBXGroup;
 			children = (
-				7185C5EF1F75822E00CF516A /* Views */,
-				7185BE051F74C7FB00CF516A /* AppDelegate.swift */,
-				7185BE071F74C7FB00CF516A /* ViewController.swift */,
-				7185BE171F74C97800CF516A /* APIClient.swift */,
-				7185BE191F74EA8400CF516A /* FileReader.swift */,
-				7185BE1D1F7500A600CF516A /* Bus.swift */,
-				7185C5F81F759BB700CF516A /* BusStop.swift */,
-				7185C5E11F754B7F00CF516A /* MapViewController.swift */,
-				7185C5EB1F75524B00CF516A /* MapViewController+UI.swift */,
-				7185C5ED1F7553DF00CF516A /* Colors.swift */,
-				7185C5F01F7584DF00CF516A /* BusSelectionViewController.swift */,
-				7185C5F21F7585C700CF516A /* BusSelectionViewController+UI.swift */,
+				71BDE16F1F76588F000C586B /* Classes */,
 				7185BE091F74C7FB00CF516A /* Main.storyboard */,
 				7185BE0C1F74C7FB00CF516A /* Assets.xcassets */,
 				7185BE0E1F74C7FB00CF516A /* LaunchScreen.storyboard */,
@@ -1121,6 +1110,49 @@
 				7185C5F51F7588DD00CF516A /* BusSelectionCell.xib */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		71BDE16F1F76588F000C586B /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7185BE051F74C7FB00CF516A /* AppDelegate.swift */,
+				71BDE1721F7658BD000C586B /* Helpers */,
+				71BDE1711F76589E000C586B /* ViewControllers */,
+				71BDE1701F765899000C586B /* Models */,
+				7185C5EF1F75822E00CF516A /* Views */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		71BDE1701F765899000C586B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7185BE1D1F7500A600CF516A /* Bus.swift */,
+				7185C5F81F759BB700CF516A /* BusStop.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		71BDE1711F76589E000C586B /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7185C5F01F7584DF00CF516A /* BusSelectionViewController.swift */,
+				7185C5F21F7585C700CF516A /* BusSelectionViewController+UI.swift */,
+				7185C5E11F754B7F00CF516A /* MapViewController.swift */,
+				7185C5EB1F75524B00CF516A /* MapViewController+UI.swift */,
+				7185BE071F74C7FB00CF516A /* ViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		71BDE1721F7658BD000C586B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7185C5ED1F7553DF00CF516A /* Colors.swift */,
+				7185BE171F74C97800CF516A /* APIClient.swift */,
+				7185BE191F74EA8400CF516A /* FileReader.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 		EDBF2BB264AEB86D5BF8538A /* Pods */ = {
