@@ -40,6 +40,7 @@ extension BusSelectionViewController{
         Observable.combineLatest(fileReader.busServices(), (searchBar.rx.text)) { [weak self] (buses, searchText) -> [Bus] in
             return (self?.search(text: searchText, buses: buses))!
         }
+        .debug()
         .bind(to: buses)
         .addDisposableTo(disposeBag)
         

@@ -47,28 +47,11 @@ class FileReader{
     
     
     func busServices() -> Observable<[Bus]> {
-        let trunkBuses = "Trunk Bus Services"
-        let feederBuses = "Feeder Bus Services"
-        let niteBuses = "Nite Bus Services"
         return requestFile(name: busServicesEndpoint).map {dataDic -> [Bus] in
-            var allBuses : [Bus] = []
-            guard let trunkBusesArray = dataDic[trunkBuses] as? [[String : Any]],
-                let feederBusesArray = dataDic[feederBuses] as? [[String : Any]],
-                let niteBusesArray = dataDic[niteBuses] as? [[String : Any]] else{
-                    return allBuses
+            guard let busServices = dataDic["services"] as? [[String : Any]] else{
+                return [Bus]()
             }
-            allBuses += trunkBusesArray.flatMap({ json -> Bus? in
-                return Bus.init(json: json, busType:feederBuses)
-            })
-            allBuses += feederBusesArray.flatMap({ json -> Bus? in
-                return Bus.init(json: json, busType:trunkBuses)
-            })
-            allBuses += niteBusesArray.flatMap({ json -> Bus? in
-                return Bus.init(json: json, busType:niteBuses)
-            })
-            return allBuses.sorted(by: { (bus1, bus2) -> Bool in
-                return bus1.busNumber.localizedStandardCompare(bus2.busNumber) == .orderedAscending
-            })
+            return busServices.flatMap(Bus.init)
         }
         .shareReplay(1)
     }
