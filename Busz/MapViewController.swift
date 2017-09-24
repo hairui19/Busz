@@ -173,11 +173,12 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
 }
 
 //MAR: - Map & CoreLocation Functions 
-extension MapViewController : CLLocationManagerDelegate {
+extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
     fileprivate func initializingMap(){
+        mapView.delegate = self
         mapView.showsUserLocation = (CLLocationManager.authorizationStatus() == .authorizedAlways)
         addBusAnnotations()
-        //addPolyLineForRoute()
+        addPolyLineForRoute()
     }
     
     fileprivate func addBusAnnotations(){
@@ -191,16 +192,35 @@ extension MapViewController : CLLocationManagerDelegate {
             }
             .subscribe(onNext: { [weak self] busAnnotations in
                 for busAnnotation in busAnnotations {
-                    print("busAnnotation = \(busAnnotation.coordinate)")
                     self?.mapView.addAnnotation(busAnnotation)
                 }
             })
             .addDisposableTo(disposeBag)
     }
     
-//    fileprivate func addPolyLineForRoute(){
-//        fileprivate.rou
-//    }
+    fileprivate func addPolyLineForRoute(){
+        choseBus
+            .asObservable()
+            .map { bus -> [CLLocationCoordinate2D] in
+                return bus.routes.map({ (altitude, longtitude) -> CLLocationCoordinate2D in
+                    return CLLocationCoordinate2D(latitude: altitude, longitude: longtitude)
+                })
+            }
+            .subscribe(onNext: { [weak self] coordinates in
+                var coords = coordinates
+                let polyline = MKPolyline(coordinates: &coords, count: coords.count)
+                self?.mapView.add(polyline)
+            })
+            .addDisposableTo(disposeBag)
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let polylineRenderer = MKPolylineRenderer(overlay: overlay)
+        polylineRenderer.strokeColor = UIColor.orange
+        polylineRenderer.lineWidth = 3
+        print("here i am casss")
+        return polylineRenderer
+    }
 }
 
 
