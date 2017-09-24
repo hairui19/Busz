@@ -91,7 +91,7 @@ class FileReader{
                 })
                 _ = route.map({ coordinateString -> Void in
                     let coodinate = coordinateString.components(separatedBy: ",")
-                    let coordinateTuple = (CLLocationDegrees(coodinate[0])!, CLLocationDegrees(coodinate[1])!)
+                    let coordinateTuple = (CLLocationDegrees(coodinate[1])!, CLLocationDegrees(coodinate[0])!)
                     updatedBus.routes.append(coordinateTuple)
                 })
             }
