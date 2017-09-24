@@ -24,6 +24,12 @@ struct Bus {
         case unknown
     }
     
+    static let dummyBus = Bus(json: [
+        "no" : "",
+        "dir" : -1,
+        "provider" : ""
+        ], busType: "")!
+    
     init?(json : [String : Any], busType : String) {
         guard let busNumber = json["no"] as? String,
             let direction = json["dir"] as? NSNumber,
