@@ -43,6 +43,27 @@ class FileReader{
         return Observable.empty()
     }
     
+    private func requestFileInArrayFormat(name:String, type : String = "json") -> Observable<[Any]>{
+        do{
+            guard let filename = Bundle.main.url(forResource: name, withExtension: type) else{
+                throw FileReaderError.invalidFilename(name)
+            }
+            let data = try Data(contentsOf: filename)
+            guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),let result = jsonObject as? [Any] else{
+                throw FileReaderError.invalidData
+            }
+            return Observable<[Any]>.just(result).shareReplay(1)
+            
+        }catch FileReaderError.invalidData{
+            print("data")
+        }catch FileReaderError.invalidFilename(let value){
+            print("invalidFilename : \(value)")
+        }catch{
+            print("hello world")
+        }
+        return Observable.empty()
+    }
+    
     // types of buses.
     
     
@@ -57,7 +78,22 @@ class FileReader{
     }
     
      func busStops() -> Observable<[String : Any]>{
-        return requestFile(name: busStopsEndpoint).shareReplay(1)
+         var allBusStopsDic = [String : Any]()
+        return requestFileInArrayFormat(name: busStopsEndpoint).map({ data -> [String : Any] in
+            guard let data = data as? [[String : Any]] else {return allBusStopsDic}
+            for singleBusStop in data {
+                guard let busStopCode = singleBusStop["no"] as? String,
+                    let lat = singleBusStop["lat"] as? String,
+                    let lng = singleBusStop["lng"] as? String,
+                    let busStopName = singleBusStop["name"] as? String else{continue}
+                allBusStopsDic[busStopCode] = [
+                    "lat" : lat,
+                    "lng" : lng,
+                    "busStopName" : busStopName
+                ]
+            }
+            return allBusStopsDic
+        })
     }
     
     func routeFor(bus: Bus) -> Observable<Bus>{
