@@ -40,7 +40,6 @@ extension BusSelectionViewController{
         Observable.combineLatest(fileReader.busServices(), (searchBar.rx.text)) { [weak self] (buses, searchText) -> [Bus] in
             return (self?.search(text: searchText, buses: buses))!
         }
-        .debug()
         .bind(to: buses)
         .addDisposableTo(disposeBag)
         
@@ -81,7 +80,7 @@ extension BusSelectionViewController : UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bus = buses.value[indexPath.row]
         let mapViewController = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
-        mapViewController.choseBus.value = bus
+        mapViewController.chosenBus.value = bus
         self.navigationController?.pushViewController(mapViewController, animated: true)
        
     }
