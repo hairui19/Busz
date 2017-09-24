@@ -25,7 +25,12 @@ class CentreButtonTabBarController: UITabBarController {
         let imageView = UIImageView(image: iconImage)
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = imageDimension / 2
+        
+        //add tapGesture to imageVIew
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(middleButtonPressed))
+        imageView.addGestureRecognizer(tapGesture)
         self.tabBar.addSubview(imageView)
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +39,11 @@ class CentreButtonTabBarController: UITabBarController {
         imageView.heightAnchor.constraint(equalToConstant: imageDimension).isActive = true
         let bottomPadding = heightOfTabbar - (imageDimension/2)
         imageView.bottomAnchor.constraint(equalTo: self.tabBar.bottomAnchor, constant: -bottomPadding).isActive = true
-        
+    }
+    
+    func middleButtonPressed(){
+        let busSelectionViewController = storyboard?.instantiateViewController(withIdentifier: "BusSelectionViewController") as! BusSelectionViewController
+        self.present(busSelectionViewController, animated: true, completion: nil)
     }
 
 }

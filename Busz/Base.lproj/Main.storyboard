@@ -192,7 +192,7 @@
         <!--Bus Selection View Controller-->
         <scene sceneID="Z3v-nJ-Pyr">
             <objects>
-                <viewController id="97D-Ig-qYI" customClass="BusSelectionViewController" customModule="Busz" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BusSelectionViewController" id="97D-Ig-qYI" customClass="BusSelectionViewController" customModule="Busz" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="C0T-Ld-nKc"/>
                         <viewControllerLayoutGuide type="bottom" id="P9q-wX-vth"/>
