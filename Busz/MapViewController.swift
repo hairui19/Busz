@@ -13,16 +13,17 @@ import RxSwift
 import CoreLocation
 
 class MapViewController: UIViewController {
-
+    
     // MARK: - Properties
     fileprivate let destinations = Variable<[String]>([])
+    fileprivate let destinationBusStop = Variable<BusStop>(BusStop.dummyBusStop)
     
     let disposeBag = DisposeBag()
     fileprivate let fileReader = FileReader()
     fileprivate let locationManager = CLLocationManager()
     
     //input
-    let choseBus = Variable<Bus>(Bus.dummyBus)
+    let chosenBus = Variable<Bus>(Bus.dummyBus)
     
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -51,7 +52,7 @@ class MapViewController: UIViewController {
     @IBAction func setAlarmButtonPressed(_ sender: UIButton) {
     }
     
-   
+    
     // MARK: - Animation Function
     fileprivate func addAnimation(animationTime : TimeInterval, layoutChanges : @escaping ()->()){
         UIView.animate(withDuration: animationTime) {
@@ -61,11 +62,28 @@ class MapViewController: UIViewController {
     
     // MARK: - Helper Functions
     fileprivate func loadData(){
-        fileReader.routeFor(bus: choseBus.value)
-            .bind(to: choseBus)
+        fileReader.routeFor(bus: chosenBus.value)
+            .bind(to: chosenBus)
             .addDisposableTo(disposeBag)
     }
-
+    
+    fileprivate func getRowForSearchText(searchText : String) -> Int{
+        var index = 0
+        for data in destinations.value{
+            if data.lowercased().range(of: searchText.lowercased()) != nil {
+                return index
+            }else{
+                index += 1
+            }
+        }
+        return -1
+    }
+    
+    fileprivate func zoomToLocation(with coordinate : CLLocationCoordinate2D){
+        let region = MKCoordinateRegionMakeWithDistance(coordinate, 1000, 1000)
+        mapView.setRegion(region, animated: true)
+    }
+    
 }
 
 //MARK: - RxSwift and Bidning
@@ -87,42 +105,51 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
-        choseBus
+        chosenBus
             .asObservable()
             .map { bus -> [String] in
-            return bus.busStops.map({ (busStop) -> String in
-                return busStop.name
-            })
-        }
-        .bind(to: destinations)
-        .addDisposableTo(disposeBag)
+                return bus.busStops.map({ (busStop) -> String in
+                    return busStop.name
+                })
+            }
+            .bind(to: destinations)
+            .addDisposableTo(disposeBag)
         
         //[.editingDidBegin, .editingDidEnd]
         let isTextFiledInEditing = Observable.from([
             destinationTextfield.rx.controlEvent(.editingDidBegin).asObservable().map{_ in return false}.asObservable(),
             destinationTextfield.rx.controlEvent(.editingDidEnd).asObservable().map{ _ in return true}.asObservable()
             ])
-        .merge()
-        .startWith(true)
-        
+            .merge()
+            .startWith(true)
+        // hides picker when not editing, shows otherwise.
         isTextFiledInEditing
             .asObservable()
             .bind(to: destinationPicker.rx.isHidden)
             .addDisposableTo(disposeBag)
         
-        
-    }
-    
-    func getRowForSearchText(searchText : String) -> Int{
-        var index = 0
-        for data in destinations.value{
-            if data.lowercased().range(of: searchText.lowercased()) != nil {
-                return index
-            }else{
-                index += 1
+        //search for destionation bus stop.
+        Observable.from([
+            destinationTextfield.rx.controlEvent(.editingDidEnd).asObservable(),
+            destinationTextfield.rx.controlEvent(.editingDidEndOnExit).asObservable()
+            ])
+            .merge()
+            .map({[weak self] _ -> String? in
+                return self?.destinationTextfield.text
+            })
+            .filter{return ($0 ?? "").characters.count > 0}
+            .map { [weak self] text -> Int in
+                return (self?.getRowForSearchText(searchText: text!))!
             }
-        }
-        return -1
+            .subscribe(onNext: { [weak self] index in
+                if index == -1 {
+                    Utility.showAlert(in: self!, title: "Cannot find the destionation")
+                }else{
+                    let coordinateTuple = self!.chosenBus.value.busStops[index].coordinate
+                    self?.zoomToLocation(with: CLLocationCoordinate2D(latitude: coordinateTuple.0, longitude: coordinateTuple.1))
+                }
+            })
+            .addDisposableTo(disposeBag)
     }
 }
 
@@ -160,7 +187,7 @@ extension MapViewController{
             addAnimation(animationTime: 0.4, layoutChanges: { [weak self] in
                 self?.whiteBoxBottomContraint.constant = 30
                 self?.view.layoutIfNeeded()
-
+                
             })
             view.endEditing(true)
         }
@@ -183,7 +210,7 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         destinationTextfield.text = destinations.value[row]
     }
-
+    
 }
 
 

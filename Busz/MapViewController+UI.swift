@@ -44,7 +44,7 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
     
     fileprivate func addBusAnnotations(){
         //plot all the bus stops
-        choseBus
+        chosenBus
             .asObservable()
             .map { (bus) -> [BusStopAnnotation] in
                 return bus.busStops.map({ (busStop) -> BusStopAnnotation in
@@ -60,7 +60,7 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
     }
     
     fileprivate func addPolyLineForRoute(){
-        choseBus
+        chosenBus
             .asObservable()
             .map { bus -> [CLLocationCoordinate2D] in
                 return bus.routes.map({ (altitude, longtitude) -> CLLocationCoordinate2D in
