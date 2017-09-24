@@ -97,6 +97,20 @@ extension MapViewController{
         .bind(to: destinations)
         .addDisposableTo(disposeBag)
         
+        //[.editingDidBegin, .editingDidEnd]
+        let isTextFiledInEditing = Observable.from([
+            destinationTextfield.rx.controlEvent(.editingDidBegin).asObservable().map{_ in return false}.asObservable(),
+            destinationTextfield.rx.controlEvent(.editingDidEnd).asObservable().map{ _ in return true}.asObservable()
+            ])
+        .merge()
+        .startWith(true)
+        
+        isTextFiledInEditing
+            .asObservable()
+            .bind(to: destinationPicker.rx.isHidden)
+            .addDisposableTo(disposeBag)
+        
+        
     }
     
     func getRowForSearchText(searchText : String) -> Int{
@@ -216,8 +230,8 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-        polylineRenderer.strokeColor = UIColor.orange
-        polylineRenderer.lineWidth = 3
+        polylineRenderer.strokeColor = Colors.pink
+        polylineRenderer.lineWidth = 2
         print("here i am casss")
         return polylineRenderer
     }
