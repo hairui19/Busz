@@ -480,6 +480,7 @@
 		71BDE5001F77A45A000C586B /* NR7.json in Resources */ = {isa = PBXBuildFile; fileRef = 71BDE3391F77A459000C586B /* NR7.json */; };
 		71BDE5011F77A45A000C586B /* NR8.json in Resources */ = {isa = PBXBuildFile; fileRef = 71BDE33A1F77A459000C586B /* NR8.json */; };
 		71BDE5021F77A45A000C586B /* RWS8.json in Resources */ = {isa = PBXBuildFile; fileRef = 71BDE33B1F77A459000C586B /* RWS8.json */; };
+		71BDE5041F77CA38000C586B /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BDE5031F77CA38000C586B /* Utility.swift */; };
 		D62203AA1271DBE492F9FA5D /* Pods_Busz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */; };
 /* End PBXBuildFile section */
 
@@ -960,6 +961,7 @@
 		71BDE3391F77A459000C586B /* NR7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = NR7.json; path = Data/NR7.json; sourceTree = "<group>"; };
 		71BDE33A1F77A459000C586B /* NR8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = NR8.json; path = Data/NR8.json; sourceTree = "<group>"; };
 		71BDE33B1F77A459000C586B /* RWS8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = RWS8.json; path = Data/RWS8.json; sourceTree = "<group>"; };
+		71BDE5031F77CA38000C586B /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD97225603DBDA1DC6EBAB2 /* Pods-Busz.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busz.release.xcconfig"; path = "Pods/Target Support Files/Pods-Busz/Pods-Busz.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1529,6 +1531,7 @@
 				7185C5ED1F7553DF00CF516A /* Colors.swift */,
 				7185BE171F74C97800CF516A /* APIClient.swift */,
 				7185BE191F74EA8400CF516A /* FileReader.swift */,
+				71BDE5031F77CA38000C586B /* Utility.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2135,6 +2138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71BDE5041F77CA38000C586B /* Utility.swift in Sources */,
 				7185C5F91F759BB700CF516A /* BusStop.swift in Sources */,
 				7185BE081F74C7FB00CF516A /* ViewController.swift in Sources */,
 				7185C5EE1F7553DF00CF516A /* Colors.swift in Sources */,
