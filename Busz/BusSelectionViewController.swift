@@ -80,7 +80,7 @@ extension BusSelectionViewController : UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bus = buses.value[indexPath.row]
         let mapViewController = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
-        mapViewController.bus = bus
+        mapViewController.choseBus.value = bus
         self.navigationController?.pushViewController(mapViewController, animated: true)
        
     }

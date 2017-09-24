@@ -16,12 +16,13 @@ class MapViewController: UIViewController {
 
     // MARK: - Properties
     fileprivate let destinations = Variable<[String]>([])
+    
     fileprivate let disposeBag = DisposeBag()
     fileprivate let fileReader = FileReader()
     fileprivate let locationManager = CLLocationManager()
     
     //input
-    var bus : Bus!
+    let choseBus = Variable<Bus>(Bus.dummyBus)
     
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -60,7 +61,9 @@ class MapViewController: UIViewController {
     
     // MARK: - Helper Functions
     fileprivate func loadData(){
-        
+        fileReader.routeFor(bus: choseBus.value)
+            .bind(to: choseBus)
+            .addDisposableTo(disposeBag)
     }
 
 }
@@ -84,7 +87,9 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
-        fileReader.routeFor(bus: bus).map { bus -> [String] in
+        choseBus
+            .asObservable()
+            .map { bus -> [String] in
             return bus.busStops.map({ (busStop) -> String in
                 return busStop.name
             })
@@ -171,21 +176,31 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
 extension MapViewController : CLLocationManagerDelegate {
     fileprivate func initializingMap(){
         mapView.showsUserLocation = (CLLocationManager.authorizationStatus() == .authorizedAlways)
- 
+        addBusAnnotations()
+        //addPolyLineForRoute()
+    }
+    
+    fileprivate func addBusAnnotations(){
         //plot all the bus stops
-        fileReader.routeFor(bus: bus).map { (bus) -> [BusStopAnnotation] in
+        choseBus
+            .asObservable()
+            .map { (bus) -> [BusStopAnnotation] in
             return bus.busStops.map({ (busStop) -> BusStopAnnotation in
                 return BusStopAnnotation(busStop: busStop)
             })
-        }
-        .subscribe(onNext: { [weak self] busAnnotations in
-            for busAnnotation in busAnnotations {
-                print("busAnnotation = \(busAnnotation.coordinate)")
-                self?.mapView.addAnnotation(busAnnotation)
             }
-        })
-        .addDisposableTo(disposeBag)
+            .subscribe(onNext: { [weak self] busAnnotations in
+                for busAnnotation in busAnnotations {
+                    print("busAnnotation = \(busAnnotation.coordinate)")
+                    self?.mapView.addAnnotation(busAnnotation)
+                }
+            })
+            .addDisposableTo(disposeBag)
     }
+    
+//    fileprivate func addPolyLineForRoute(){
+//        fileprivate.rou
+//    }
 }
 
 
