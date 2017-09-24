@@ -98,6 +98,7 @@ class FileReader{
             
             return updatedBus
         }
+        .shareReplay(1)
         
     }
     
