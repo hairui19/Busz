@@ -20,8 +20,8 @@ struct BusStop {
             return nil
         }
         let coordinateArray = coordinateStr.components(separatedBy: ",")
-        guard let altitude = CLLocationDegrees(coordinateArray[0]),
-            let longitude = CLLocationDegrees(coordinateArray[1]) else{
+        guard let altitude = CLLocationDegrees(coordinateArray[1]),
+            let longitude = CLLocationDegrees(coordinateArray[0]) else{
                 return nil
         }
         self.busStopCode = busStopCode
