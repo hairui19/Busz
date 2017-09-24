@@ -354,6 +354,7 @@
 		7185C5F61F7588DD00CF516A /* BusSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185C5F41F7588DD00CF516A /* BusSelectionCell.swift */; };
 		7185C5F71F7588DD00CF516A /* BusSelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7185C5F51F7588DD00CF516A /* BusSelectionCell.xib */; };
 		7185C5F91F759BB700CF516A /* BusStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185C5F81F759BB700CF516A /* BusStop.swift */; };
+		71BDE1741F77825A000C586B /* BusStopAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BDE1731F77825A000C586B /* BusStopAnnotation.swift */; };
 		D62203AA1271DBE492F9FA5D /* Pods_Busz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */; };
 /* End PBXBuildFile section */
 
@@ -708,6 +709,7 @@
 		7185C5F41F7588DD00CF516A /* BusSelectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusSelectionCell.swift; sourceTree = "<group>"; };
 		7185C5F51F7588DD00CF516A /* BusSelectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusSelectionCell.xib; sourceTree = "<group>"; };
 		7185C5F81F759BB700CF516A /* BusStop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusStop.swift; sourceTree = "<group>"; };
+		71BDE1731F77825A000C586B /* BusStopAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusStopAnnotation.swift; sourceTree = "<group>"; };
 		CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD97225603DBDA1DC6EBAB2 /* Pods-Busz.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busz.release.xcconfig"; path = "Pods/Target Support Files/Pods-Busz/Pods-Busz.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1129,6 +1131,7 @@
 			children = (
 				7185BE1D1F7500A600CF516A /* Bus.swift */,
 				7185C5F81F759BB700CF516A /* BusStop.swift */,
+				71BDE1731F77825A000C586B /* BusStopAnnotation.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1638,6 +1641,7 @@
 				7185C5F61F7588DD00CF516A /* BusSelectionCell.swift in Sources */,
 				7185C5EC1F75524B00CF516A /* MapViewController+UI.swift in Sources */,
 				7185C5E21F754B7F00CF516A /* MapViewController.swift in Sources */,
+				71BDE1741F77825A000C586B /* BusStopAnnotation.swift in Sources */,
 				7185C5F11F7584DF00CF516A /* BusSelectionViewController.swift in Sources */,
 				7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */,
 				7185C5F31F7585C700CF516A /* BusSelectionViewController+UI.swift in Sources */,
