@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import RxCocoa
 import RxSwift
+import CoreLocation
 
 class MapViewController: UIViewController {
 
@@ -17,6 +18,7 @@ class MapViewController: UIViewController {
     fileprivate let destinations = Variable<[String]>([])
     fileprivate let disposeBag = DisposeBag()
     fileprivate let fileReader = FileReader()
+    fileprivate let locationManager = CLLocationManager()
     
     //input
     var bus : Bus!
@@ -36,6 +38,7 @@ class MapViewController: UIViewController {
         setupUI()
         addNotifications()
         addTapToDismissEditingGesture()
+        initializingMap()
         bindingUItoRx()
     }
     
@@ -162,6 +165,27 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
         destinationTextfield.text = destinations.value[row]
     }
 
+}
+
+//MAR: - Map & CoreLocation Functions 
+extension MapViewController : CLLocationManagerDelegate {
+    fileprivate func initializingMap(){
+        mapView.showsUserLocation = (CLLocationManager.authorizationStatus() == .authorizedAlways)
+ 
+        //plot all the bus stops
+        fileReader.routeFor(bus: bus).map { (bus) -> [BusStopAnnotation] in
+            return bus.busStops.map({ (busStop) -> BusStopAnnotation in
+                return BusStopAnnotation(busStop: busStop)
+            })
+        }
+        .subscribe(onNext: { [weak self] busAnnotations in
+            for busAnnotation in busAnnotations {
+                print("busAnnotation = \(busAnnotation.coordinate)")
+                self?.mapView.addAnnotation(busAnnotation)
+            }
+        })
+        .addDisposableTo(disposeBag)
+    }
 }
 
 
