@@ -37,9 +37,12 @@ class BusSelectionViewController: UIViewController {
 //MARK: - RXSwift and RxCocoa
 extension BusSelectionViewController{
     func bindUItoRx(){
-        fileReader.busServices()
-            .bind(to: buses)
-            .addDisposableTo(disposeBag)
+        Observable.combineLatest(fileReader.busServices(), (searchBar.rx.text)) { [weak self] (buses, searchText) -> [Bus] in
+            return (self?.search(text: searchText, buses: buses))!
+        }
+        .bind(to: buses)
+        .addDisposableTo(disposeBag)
+        
         
         buses.asObservable()
             .observeOn(MainScheduler.instance)
@@ -47,6 +50,13 @@ extension BusSelectionViewController{
                 self?.collectionView.reloadData()
             })
             .addDisposableTo(disposeBag)
+    }
+    
+    fileprivate func search(text : String?,buses : [Bus])-> [Bus]{
+        guard let searchText = text, searchText.characters.count > 0 else{ return buses }
+        return buses.filter({ (bus) -> Bool in
+            return bus.busNumber.range(of: searchText) != nil
+        })
     }
 }
 
