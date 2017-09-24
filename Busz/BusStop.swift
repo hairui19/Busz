@@ -34,5 +34,5 @@ struct BusStop {
         "lat" : "",
         "lng" : "",
         "name" : ""
-        ])
+        ])!
 }
