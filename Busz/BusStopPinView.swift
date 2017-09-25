@@ -19,6 +19,16 @@ class BusStopPinView: MKAnnotationView {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         image = UIImage(named: "busStopPinImage")
         canShowCallout = true
+        rightCalloutAccessoryView = customRightCalloutAccessoryView()
+        
+    }
+    
+    func customRightCalloutAccessoryView() -> UIButton{
+        let button = UIButton(type: .custom)
+        button.frame = CGRect(x: 0, y: 0, width: 25, height: 41)
+        //button.layer.cornerRadius = 23/2
+        button.setImage(UIImage(named: "destinationBusStop"), for: .normal)
+        return button
     }
 
 }
