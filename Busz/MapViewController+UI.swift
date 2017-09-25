@@ -82,5 +82,23 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
         print("here i am casss")
         return polylineRenderer
     }
+    
+    // setting up pinView
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if let annotation = annotation as? BusStopAnnotation {
+            let identifier = "busStopPin"
+            var view : BusStopPinView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? BusStopPinView{
+                dequeuedView.annotation = annotation
+                view = dequeuedView
+            }else{
+                view = BusStopPinView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            
+            return view
+        }
+        
+        return nil
+    }
 }
 
