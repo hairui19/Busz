@@ -48,7 +48,7 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
             .asObservable()
             .map { (bus) -> [BusStopAnnotation] in
                 return bus.busStops.map({ (busStop) -> BusStopAnnotation in
-                    return BusStopAnnotation(busStop: busStop)
+                    return BusStopAnnotation(title: busStop.name, busStopCode: busStop.busStopCode, coordinate: busStop.coordinate)
                 })
             }
             .subscribe(onNext: { [weak self] busAnnotations in
@@ -96,9 +96,30 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
             }
             
             return view
+        }else if let annotation = annotation as? DestinationBusStopAnnotation{
+            let identifier = "destionationBusStopPin"
+            var view : DestinationBusStopPinView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? DestinationBusStopPinView{
+                dequeuedView.annotation = annotation
+                view = dequeuedView
+            }else{
+                view = DestinationBusStopPinView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            return view
         }
         
         return nil
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if view is BusStopPinView{
+            guard let annotation = view.annotation else{
+                return
+            }
+            mapView.removeAnnotation(annotation)
+            let destinationBusStopAnnotation = DestinationBusStopAnnotation(title: (annotation.title ?? "")!, busStopCode: (annotation.subtitle ?? "")!, coordinate: (annotation.coordinate.latitude, annotation.coordinate.longitude))
+            mapView.addAnnotation(destinationBusStopAnnotation)
+        }
     }
 }
 
