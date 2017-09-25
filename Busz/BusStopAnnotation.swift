@@ -18,10 +18,10 @@ class BusStopAnnotation : NSObject, MKAnnotation {
         return busStopCode
     }
     
-    init( busStop : BusStop) {
-        title = busStop.name
-        busStopCode = busStop.busStopCode
-        coordinate = CLLocationCoordinate2D(latitude: busStop.coordinate.0, longitude: busStop.coordinate.1)
-        super.init()
+    
+    init(title : String, busStopCode : String, coordinate : (CLLocationDegrees,CLLocationDegrees )){
+        self.title = title
+        self.busStopCode = busStopCode
+        self.coordinate = CLLocationCoordinate2D(latitude: coordinate.0, longitude: coordinate.1)
     }
 }
