@@ -483,6 +483,8 @@
 		71BDE5041F77CA38000C586B /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BDE5031F77CA38000C586B /* Utility.swift */; };
 		71BDE5061F77FF4B000C586B /* CentreButtonTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BDE5051F77FF4B000C586B /* CentreButtonTabBarController.swift */; };
 		71BDE5081F78A179000C586B /* BusStopPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BDE5071F78A179000C586B /* BusStopPinView.swift */; };
+		71BDE50A1F78ACCE000C586B /* DestinationBusStopAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BDE5091F78ACCE000C586B /* DestinationBusStopAnnotation.swift */; };
+		71BDE50C1F78AE8D000C586B /* DestinationBusStopPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BDE50B1F78AE8D000C586B /* DestinationBusStopPinView.swift */; };
 		D62203AA1271DBE492F9FA5D /* Pods_Busz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */; };
 /* End PBXBuildFile section */
 
@@ -966,6 +968,8 @@
 		71BDE5031F77CA38000C586B /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		71BDE5051F77FF4B000C586B /* CentreButtonTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentreButtonTabBarController.swift; sourceTree = "<group>"; };
 		71BDE5071F78A179000C586B /* BusStopPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusStopPinView.swift; sourceTree = "<group>"; };
+		71BDE5091F78ACCE000C586B /* DestinationBusStopAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationBusStopAnnotation.swift; sourceTree = "<group>"; };
+		71BDE50B1F78AE8D000C586B /* DestinationBusStopPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationBusStopPinView.swift; sourceTree = "<group>"; };
 		CEF0AC1C0BF3A72204CAAF87 /* Pods_Busz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Busz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD97225603DBDA1DC6EBAB2 /* Pods-Busz.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busz.release.xcconfig"; path = "Pods/Target Support Files/Pods-Busz/Pods-Busz.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1490,6 +1494,7 @@
 			isa = PBXGroup;
 			children = (
 				71BDE5071F78A179000C586B /* BusStopPinView.swift */,
+				71BDE50B1F78AE8D000C586B /* DestinationBusStopPinView.swift */,
 				7185C5F41F7588DD00CF516A /* BusSelectionCell.swift */,
 				7185C5F51F7588DD00CF516A /* BusSelectionCell.xib */,
 			);
@@ -1514,6 +1519,7 @@
 				7185BE1D1F7500A600CF516A /* Bus.swift */,
 				7185C5F81F759BB700CF516A /* BusStop.swift */,
 				71BDE1731F77825A000C586B /* BusStopAnnotation.swift */,
+				71BDE5091F78ACCE000C586B /* DestinationBusStopAnnotation.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -2158,6 +2164,8 @@
 				7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */,
 				7185C5F31F7585C700CF516A /* BusSelectionViewController+UI.swift in Sources */,
 				7185BE181F74C97800CF516A /* APIClient.swift in Sources */,
+				71BDE50C1F78AE8D000C586B /* DestinationBusStopPinView.swift in Sources */,
+				71BDE50A1F78ACCE000C586B /* DestinationBusStopAnnotation.swift in Sources */,
 				7185BE1A1F74EA8400CF516A /* FileReader.swift in Sources */,
 				7185BE1E1F7500A600CF516A /* Bus.swift in Sources */,
 			);
