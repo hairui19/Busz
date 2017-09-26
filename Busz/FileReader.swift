@@ -106,7 +106,7 @@ class FileReader{
                 _ = busStopCodes.map({ stopCode -> Void in
                     let busStopInfo = busStopsDic[stopCode] as? [String : Any]
                     if let busStop = BusStop(busStopCode: stopCode, busStopInfo: busStopInfo!){
-                        updatedBus.busStops.append(busStop)
+                        updatedBus.busStops.normalStops.append(busStop)
                     }
                 })
                 _ = route.map({ coordinateString -> Void in
