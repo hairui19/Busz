@@ -31,7 +31,7 @@ class CentreButtonTabBarController: UITabBarController {
         //add tapGesture to imageVIew
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(middleButtonPressed))
         imageView.addGestureRecognizer(tapGesture)
-        self.tabBar.addSubview(imageView)
+        self.view.addSubview(imageView)
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.centerXAnchor.constraint(equalTo: self.tabBar.centerXAnchor).isActive = true
