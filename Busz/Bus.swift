@@ -14,7 +14,7 @@ struct Bus {
     let provider : String
     let startingBusStop : String
     var routes : Array<(CLLocationDegrees , CLLocationDegrees)> = []
-    var busStops : Array<BusStop> = []
+    var busStops : BusStops = BusStops()
     
     static let dummyBus = Bus(json: [
             "no" : "dummyBusNo"
