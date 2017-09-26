@@ -178,7 +178,11 @@ extension MapViewController{
                 if index == -1 {
                     Utility.showAlert(in: self!, title: "Cannot find the destionation")
                 }else{
-                    let coordinateTuple = self!.busStops.value[index].coordinate
+                    let selectedBusStop = self!.busStops.value[index]
+                    let coordinateTuple = selectedBusStop.coordinate
+                    let destinationBusStopAnnotation = DestinationBusStopAnnotation(title: selectedBusStop.name, busStopCode: selectedBusStop.busStopCode, coordinate: coordinateTuple)
+                    self?.destinationAnnotationManager.value.update(destinationBusStopAnnotation)
+                    
                     self?.zoomToLocation(with: CLLocationCoordinate2D(latitude: coordinateTuple.0, longitude: coordinateTuple.1))
                 }
             })
