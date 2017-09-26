@@ -16,7 +16,6 @@ class MapViewController: UIViewController {
     
     // MARK: - Properties
     fileprivate let busStops = Variable<[BusStop]>([])
-   
     fileprivate let destinationsDescrip = Variable<[String]>([])
     fileprivate let destinationAnnotationManager = Variable<DestinationAnnotationManager>(DestinationAnnotationManager())
     
@@ -26,6 +25,7 @@ class MapViewController: UIViewController {
     
     //input
     let chosenBus = Variable<Bus>(Bus.dummyBus)
+    fileprivate let notificationRadius : CLLocationDegrees = 150
     
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -324,6 +324,8 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
 //MAR: - Map & CoreLocation Functions
 extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
     func initializingMap(){
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         mapView.delegate = self
         mapView.showsUserLocation = (CLLocationManager.authorizationStatus() == .authorizedAlways)
     }
@@ -339,7 +341,7 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
     // setting up pinView
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? BusStopAnnotation {
-            let identifier = "busStopPin"
+            let identifier = Identifiers.kNormalBusStopAnnotationView
             var view : BusStopPinView
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? BusStopPinView{
                 dequeuedView.annotation = annotation
@@ -350,7 +352,7 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
             
             return view
         }else if let annotation = annotation as? DestinationBusStopAnnotation{
-            let identifier = "destionationBusStopPin"
+            let identifier = Identifiers.kDestinationBusStopAnnotationView
             var view : DestinationBusStopPinView
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? DestinationBusStopPinView{
                 dequeuedView.annotation = annotation
@@ -375,6 +377,39 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
         
         if view is DestinationBusStopPinView {
             destinationAnnotationManager.value.remove()
+        }
+    }
+}
+
+//MARK: GeoFencing
+extension MapViewController{
+    func monitoringRegion(_ destinationBusStop : DestinationBusStopAnnotation)->CLCircularRegion{
+        let region = CLCircularRegion(center: destinationBusStop.coordinate, radius: notificationRadius, identifier: Identifiers.kMonitoringRegion)
+        region.notifyOnEntry = true
+        region.notifyOnExit = false
+        return region
+    }
+    
+    func startMonitoring(){
+        if !CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self){
+            Utility.showAlert(in: self, title: Strings.kError, message: Strings.kGeoFencingFeatureNotAvailable)
+            return
+        }
+        
+        if CLLocationManager.authorizationStatus() != .authorizedAlways {
+            Utility.showAlert(in: self, title: Strings.kWarning, message: Strings.kAllowLocationAccess)
+        }
+        
+        if let destinationBusStop = destinationAnnotationManager.value.currentDestionationAnnotation{
+            let region = monitoringRegion(destinationBusStop)
+            locationManager.startMonitoring(for: region)
+        }
+    }
+    
+    func stopMonitoring() {
+        for region in locationManager.monitoredRegions {
+            guard let circularRegion = region as? CLCircularRegion, circularRegion.identifier == Identifiers.kMonitoringRegion else { continue }
+            locationManager.stopMonitoring(for: circularRegion)
         }
     }
 }
