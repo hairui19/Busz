@@ -11,10 +11,12 @@ import MapKit
 import RxCocoa
 import RxSwift
 import CoreLocation
+import UserNotifications
 
 class MapViewController: UIViewController {
     
     // MARK: - Properties
+    
     fileprivate let busStops = Variable<[BusStop]>([])
     fileprivate let destinationsDescrip = Variable<[String]>([])
     fileprivate let destinationAnnotationManager = Variable<DestinationAnnotationManager>(DestinationAnnotationManager())
@@ -245,6 +247,8 @@ extension MapViewController{
                 }
             })
             .addDisposableTo(disposeBag)
+
+        // use a button to set
     }
     
     func busStopAnnotationFromDestionationAnnotation(_ destionationAnnotation : DestinationBusStopAnnotation) -> BusStopAnnotation{
@@ -322,7 +326,7 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
 
 
 //MAR: - Map & CoreLocation Functions
-extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
+extension MapViewController : MKMapViewDelegate {
     func initializingMap(){
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -381,8 +385,8 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
     }
 }
 
-//MARK: GeoFencing
-extension MapViewController{
+//MARK: GeoFencing - CLLocationManagerDelegate
+extension MapViewController : CLLocationManagerDelegate{
     func monitoringRegion(_ destinationBusStop : DestinationBusStopAnnotation)->CLCircularRegion{
         let region = CLCircularRegion(center: destinationBusStop.coordinate, radius: notificationRadius, identifier: Identifiers.kMonitoringRegion)
         region.notifyOnEntry = true
@@ -403,6 +407,7 @@ extension MapViewController{
         if let destinationBusStop = destinationAnnotationManager.value.currentDestionationAnnotation{
             let region = monitoringRegion(destinationBusStop)
             locationManager.startMonitoring(for: region)
+            
         }
     }
     
@@ -411,6 +416,25 @@ extension MapViewController{
             guard let circularRegion = region as? CLCircularRegion, circularRegion.identifier == Identifiers.kMonitoringRegion else { continue }
             locationManager.stopMonitoring(for: circularRegion)
         }
+    }
+    
+    func addNotification(){
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = Strings.kAttention
+        notificationContent.body = Strings.kAlmostArrived
+        notificationContent.sound = UNNotificationSound.default()
+        let timeScheduleNotification = UNTimeIntervalNotificationTrigger(timeInterval: 0.0, repeats: false)
+    
+        let notificationRequest = UNNotificationRequest(identifier: Identifiers.kLocationNotification, content: notificationContent, trigger: timeScheduleNotification)
+        UNUserNotificationCenter.current().add(notificationRequest, withCompletionHandler: nil)
+    }
+    
+    func removeNotification(){
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [Identifiers.kLocationNotification])
+    }
+
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        addNotification()
     }
 }
 
