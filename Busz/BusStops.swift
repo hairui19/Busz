@@ -10,6 +10,11 @@ import Foundation
 
 
 struct BusStops {
-    let busStops : [BusStop]
+    var normalStops : [BusStop]
     let destinationBusStop : BusStop?
+    
+    init(){
+        normalStops = []
+        destinationBusStop = nil
+    }
 }
