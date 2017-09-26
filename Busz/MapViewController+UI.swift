@@ -47,7 +47,7 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
         chosenBus
             .asObservable()
             .map { (bus) -> [BusStopAnnotation] in
-                return bus.busStops.map({ (busStop) -> BusStopAnnotation in
+                return bus.busStops.normalStops.map({ (busStop) -> BusStopAnnotation in
                     return BusStopAnnotation(title: busStop.name, busStopCode: busStop.busStopCode, coordinate: busStop.coordinate)
                 })
             }
