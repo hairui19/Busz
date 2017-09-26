@@ -228,18 +228,36 @@ extension MapViewController{
                 case (nil, nil):
                     return
                 case (nil, _):
+                    let currentBusStopAnnotation = self!.busStopAnnotationFromDestionationAnnotation(currentAnnotation!)
+                    self?.mapView.removeAnnotation(currentBusStopAnnotation)
                     self?.mapView.addAnnotation(currentAnnotation!)
-                    
                 case (_, nil):
                     self?.mapView.removeAnnotation(previousAnnotation!)
+                    let busStopAnnotation = self!.busStopAnnotationFromDestionationAnnotation(previousAnnotation!)
+                    self?.mapView.addAnnotation(busStopAnnotation)
                 case (_, _):
                     self?.mapView.removeAnnotation(previousAnnotation!)
                     self?.mapView.addAnnotation(currentAnnotation!)
-                    let busStopAnnotaiton = BusStopAnnotation(title: previousAnnotation!.title ?? "", busStopCode: previousAnnotation!.busStopCode , coordinate: (previousAnnotation!.coordinate.latitude, previousAnnotation!.coordinate.longitude))
-                    self?.mapView.addAnnotation(busStopAnnotaiton)
+                    let busStopAnnotaitonToBeInserted = self!.busStopAnnotationFromDestionationAnnotation(previousAnnotation!)
+                    self?.mapView.addAnnotation(busStopAnnotaitonToBeInserted)
+                    let busStopAnnotaitonToBeDeleted = self!.busStopAnnotationFromDestionationAnnotation(currentAnnotation!)
+                     self?.mapView.removeAnnotation(busStopAnnotaitonToBeDeleted)
                 }
             })
             .addDisposableTo(disposeBag)
+    }
+    
+    func busStopAnnotationFromDestionationAnnotation(_ destionationAnnotation : DestinationBusStopAnnotation) -> BusStopAnnotation{
+        for annotion in mapView.annotations{
+            if let busStopAnnotation = annotion as? BusStopAnnotation{
+                if busStopAnnotation.subtitle == destionationAnnotation.subtitle{
+                    print("here")
+                    return busStopAnnotation
+                }
+            }
+            
+        }
+        return BusStopAnnotation(title: destionationAnnotation.title ?? "", busStopCode: destionationAnnotation.busStopCode , coordinate: (destionationAnnotation.coordinate.latitude, destionationAnnotation.coordinate.longitude))
     }
 }
 
@@ -353,18 +371,12 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
             guard let annotation = view.annotation as? BusStopAnnotation else{
                 return
             }
-            mapView.removeAnnotation(annotation)
              let destinationBusStopAnnotation = DestinationBusStopAnnotation(title: (annotation.title ?? "")!, busStopCode: (annotation.subtitle ?? "")!, coordinate: (annotation.coordinate.latitude, annotation.coordinate.longitude))
             destinationAnnotationManager.value.update(destinationBusStopAnnotation)
         }
         
         if view is DestinationBusStopPinView {
-            guard let annotation = view.annotation as? DestinationBusStopAnnotation else{
-                return
-            }
             destinationAnnotationManager.value.remove()
-            let busStopAnnotation = BusStopAnnotation(title: (annotation.title ?? "")!, busStopCode: (annotation.subtitle ?? "")!, coordinate: (annotation.coordinate.latitude, annotation.coordinate.longitude))
-            mapView.addAnnotation(busStopAnnotation)
         }
     }
 }
