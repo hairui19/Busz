@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		71565CFE1F7A1B4D008CDCBE /* DestinationAnnotationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565CFD1F7A1B4D008CDCBE /* DestinationAnnotationManager.swift */; };
+		71565D011F7AAECD008CDCBE /* default-alarm.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 71565D001F7AAECD008CDCBE /* default-alarm.aiff */; };
 		7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE051F74C7FB00CF516A /* AppDelegate.swift */; };
 		7185BE081F74C7FB00CF516A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE071F74C7FB00CF516A /* ViewController.swift */; };
 		7185BE0B1F74C7FB00CF516A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7185BE091F74C7FB00CF516A /* Main.storyboard */; };
@@ -493,6 +494,7 @@
 /* Begin PBXFileReference section */
 		38137CB0A1D5A13EB620BBF0 /* Pods-Busz.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Busz.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Busz/Pods-Busz.debug.xcconfig"; sourceTree = "<group>"; };
 		71565CFD1F7A1B4D008CDCBE /* DestinationAnnotationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationAnnotationManager.swift; sourceTree = "<group>"; };
+		71565D001F7AAECD008CDCBE /* default-alarm.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "default-alarm.aiff"; sourceTree = "<group>"; };
 		7185BE021F74C7FB00CF516A /* Busz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7185BE051F74C7FB00CF516A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7185BE071F74C7FB00CF516A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -1000,6 +1002,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		71565CFF1F7AAEB7008CDCBE /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				71565D001F7AAECD008CDCBE /* default-alarm.aiff */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
 		7185BDF91F74C7FA00CF516A = {
 			isa = PBXGroup;
 			children = (
@@ -1021,6 +1031,7 @@
 		7185BE041F74C7FB00CF516A /* Busz */ = {
 			isa = PBXGroup;
 			children = (
+				71565CFF1F7AAEB7008CDCBE /* Audio */,
 				71BDE16F1F76588F000C586B /* Classes */,
 				7185BE091F74C7FB00CF516A /* Main.storyboard */,
 				7185BE0C1F74C7FB00CF516A /* Assets.xcassets */,
@@ -1704,6 +1715,7 @@
 				71BDE49F1F77A45A000C586B /* 806.json in Resources */,
 				71BDE4AA1F77A45A000C586B /* 854E.json in Resources */,
 				71BDE3CE1F77A459000C586B /* 107M.json in Resources */,
+				71565D011F7AAECD008CDCBE /* default-alarm.aiff in Resources */,
 				71BDE4831F77A45A000C586B /* 382G.json in Resources */,
 				71BDE37F1F77A459000C586B /* 49.json in Resources */,
 				71BDE3F81F77A459000C586B /* 147.json in Resources */,
