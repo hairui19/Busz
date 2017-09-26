@@ -15,7 +15,8 @@ import CoreLocation
 class MapViewController: UIViewController {
     
     // MARK: - Properties
-    fileprivate let busStops = Variable<BusStops>(BusStops())
+    fileprivate let busStops = Variable<[BusStop]>([])
+    fileprivate let destinationBusStop = Variable<BusStop?>(nil)
     fileprivate let destinationsDescrip = Variable<[String]>([])
     
     let disposeBag = DisposeBag()
@@ -104,6 +105,22 @@ extension MapViewController{
             .bind(to: destinationsDescrip)
             .addDisposableTo(disposeBag)
         
+        chosenBus
+            .asObservable()
+            .map { bus -> [BusStop] in
+                return bus.busStops.normalStops
+            }
+            .bind(to: busStops)
+            .addDisposableTo(disposeBag)
+        
+        chosenBus
+            .asObservable()
+            .map{bus -> BusStop? in
+                return bus.busStops.destinationBusStop
+            }
+            .bind(to: destinationBusStop)
+            .addDisposableTo(disposeBag)
+        
        
     }
     
@@ -138,7 +155,8 @@ extension MapViewController{
             .bind(to: destinationPicker.rx.isHidden)
             .addDisposableTo(disposeBag)
         
-        //search for destionation bus stop.
+        // Whenever user taps search or dismiss keyboard.
+        // The map zooms in to the destination on the textfield.
         Observable.from([
             destinationTextfield.rx.controlEvent(.editingDidEnd).asObservable(),
             destinationTextfield.rx.controlEvent(.editingDidEndOnExit).asObservable()
@@ -155,7 +173,7 @@ extension MapViewController{
                 if index == -1 {
                     Utility.showAlert(in: self!, title: "Cannot find the destionation")
                 }else{
-                    let coordinateTuple = self!.chosenBus.value.busStops.normalStops[index].coordinate
+                    let coordinateTuple = self!.busStops.value[index].coordinate
                     self?.zoomToLocation(with: CLLocationCoordinate2D(latitude: coordinateTuple.0, longitude: coordinateTuple.1))
                 }
             })
