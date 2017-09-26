@@ -251,7 +251,6 @@ extension MapViewController{
         for annotion in mapView.annotations{
             if let busStopAnnotation = annotion as? BusStopAnnotation{
                 if busStopAnnotation.subtitle == destionationAnnotation.subtitle{
-                    print("here")
                     return busStopAnnotation
                 }
             }
@@ -334,7 +333,6 @@ extension MapViewController : CLLocationManagerDelegate, MKMapViewDelegate {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         polylineRenderer.strokeColor = Colors.pink
         polylineRenderer.lineWidth = 2
-        print("here i am casss")
         return polylineRenderer
     }
     
