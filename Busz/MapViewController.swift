@@ -15,8 +15,8 @@ import CoreLocation
 class MapViewController: UIViewController {
     
     // MARK: - Properties
-    fileprivate let destinations = Variable<[String]>([])
-    fileprivate let destinationBusStop = Variable<BusStop>(BusStop.dummyBusStop)
+    fileprivate let busStops = Variable<BusStops>(BusStops())
+    fileprivate let destinationsDescrip = Variable<[String]>([])
     
     let disposeBag = DisposeBag()
     fileprivate let fileReader = FileReader()
@@ -41,7 +41,7 @@ class MapViewController: UIViewController {
         addNotifications()
         addTapToDismissEditingGesture()
         initializingMap()
-        bindingUItoRx()
+        binding()
     }
     
     deinit {
@@ -69,7 +69,7 @@ class MapViewController: UIViewController {
     
     fileprivate func getRowForSearchText(searchText : String) -> Int{
         var index = 0
-        for data in destinations.value{
+        for data in destinationsDescrip.value{
             if data.lowercased().range(of: searchText.lowercased()) != nil {
                 return index
             }else{
@@ -88,7 +88,26 @@ class MapViewController: UIViewController {
 
 //MARK: - RxSwift and Bidning
 extension MapViewController{
-    func bindingUItoRx(){
+    
+    fileprivate func binding(){
+        bindingData()
+        bindingUI()
+    }
+    fileprivate func bindingData(){
+        chosenBus
+            .asObservable()
+            .map { bus -> [String] in
+                return bus.busStops.normalStops.map({ (busStop) -> String in
+                    return busStop.name
+                })
+            }
+            .bind(to: destinationsDescrip)
+            .addDisposableTo(disposeBag)
+        
+       
+    }
+    
+    fileprivate func bindingUI(){
         (destinationTextfield.rx.text)
             .asObservable()
             .filter{ return ($0 ?? "").characters.count > 0 }
@@ -105,15 +124,6 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
-        chosenBus
-            .asObservable()
-            .map { bus -> [String] in
-                return bus.busStops.map({ (busStop) -> String in
-                    return busStop.name
-                })
-            }
-            .bind(to: destinations)
-            .addDisposableTo(disposeBag)
         
         //[.editingDidBegin, .editingDidEnd]
         let isTextFiledInEditing = Observable.from([
@@ -145,7 +155,7 @@ extension MapViewController{
                 if index == -1 {
                     Utility.showAlert(in: self!, title: "Cannot find the destionation")
                 }else{
-                    let coordinateTuple = self!.chosenBus.value.busStops[index].coordinate
+                    let coordinateTuple = self!.chosenBus.value.busStops.normalStops[index].coordinate
                     self?.zoomToLocation(with: CLLocationCoordinate2D(latitude: coordinateTuple.0, longitude: coordinateTuple.1))
                 }
             })
@@ -200,15 +210,15 @@ extension MapViewController : UIPickerViewDelegate, UIPickerViewDataSource{
         return 1
     }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return destinations.value.count
+        return destinationsDescrip.value.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return destinations.value[row]
+        return destinationsDescrip.value[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        destinationTextfield.text = destinations.value[row]
+        destinationTextfield.text = destinationsDescrip.value[row]
     }
     
 }
