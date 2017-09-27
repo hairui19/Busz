@@ -9,21 +9,63 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Foundation
 
 class MainViewController: UIViewController {
 
+    
+    //MARK: - Properties
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var arrivalTimesImageView: UIImageView!
     @IBOutlet weak var pastDestinationsImageView: UIImageView!
     
     @IBOutlet weak var collectionView: UICollectionView!
-    fileprivate var isBusArrivalTab = false
+    fileprivate var isBusArrivalTab = true
     
     //private let apiClient = APIClient.share
     private let fileReader = FileReader.share
+    
+    //MARK: - Life Cycle Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setUpClicksOnImages()
+    }
+    
+    private func setUpClicksOnImages(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(arrivalTimesTapped))
+        arrivalTimesImageView.addGestureRecognizer(tapGesture)
+        arrivalTimesImageView.isUserInteractionEnabled = true
+        arrivalTimesImageView.image = UIImage(named: "arrivalTimesTapped")
+        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(destinationTapped))
+        pastDestinationsImageView.addGestureRecognizer(tapGesture1)
+        pastDestinationsImageView.isUserInteractionEnabled = true
+    }
+    
+    func arrivalTimesTapped(){
+        isBusArrivalTab = true
+        arrivalTimesImageView.image = UIImage(named: "arrivalTimesTapped")
+        pastDestinationsImageView.image = UIImage(named: "pastDestinations")
+        collectionView.reloadData()
+    }
+    
+    func destinationTapped(){
+        isBusArrivalTab = false
+        arrivalTimesImageView.image = UIImage(named: "arrivalTimes")
+        pastDestinationsImageView.image = UIImage(named: "destinationsTapped")
+        collectionView.reloadData()
+    }
+    
+    func pullToRefresh(){
+        let refreshControl = collectionView.refreshControl!
+        refreshControl.backgroundColor = UIColor(white: 0.98, alpha: 1.0)
+        refreshControl.tintColor = UIColor.darkGray
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    func refresh(){
+        collectionView.refreshControl?.endRefreshing()
     }
 }
 
