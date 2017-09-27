@@ -97,12 +97,12 @@ class FileReader{
         .shareReplay(1)
     }
     
-    func routeFor(bus: Bus) -> Observable<Bus>{
+    func route(number : String, bus: Bus) -> Observable<Bus>{
         let busStopsObservable = self.busStops()
         let routeObservable = requestFile(name: bus.busNumber)
         return Observable.combineLatest(busStopsObservable, routeObservable) {busStopsDic, routeData -> Bus in
             var updatedBus = bus
-            if let route1 = routeData["1"] as? [String : Any], let route = route1["route"] as? [String], let busStopCodes = route1["stops"] as? [String] {
+            if let route1 = routeData[number] as? [String : Any], let route = route1["route"] as? [String], let busStopCodes = route1["stops"] as? [String] {
                 _ = busStopCodes.map({ stopCode -> Void in
                     let busStopInfo = busStopsDic[stopCode] as? [String : Any]
                     if let busStop = BusStop(busStopCode: stopCode, busStopInfo: busStopInfo!){
