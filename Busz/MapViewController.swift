@@ -26,7 +26,7 @@ class MapViewController: UIViewController {
     fileprivate let locationManager = CLLocationManager()
     
     //input
-    let chosenBus = Variable<Bus>(Bus.dummyBus)
+    let chosenBus = Variable<Bus?>(nil)
     fileprivate let notificationRadius : CLLocationDegrees = 150
     
     // IBOutlets
@@ -66,9 +66,12 @@ class MapViewController: UIViewController {
     
     // MARK: - Helper Functions
     fileprivate func loadData(){
-        fileReader.routeFor(bus: chosenBus.value)
-            .bind(to: chosenBus)
-            .addDisposableTo(disposeBag)
+        if let bus = chosenBus.value{
+            fileReader.routeFor(bus: bus)
+                .debug()
+                .bind(to: chosenBus)
+                .addDisposableTo(disposeBag)
+        }
     }
     
     fileprivate func getRowForSearchText(searchText : String) -> Int{
@@ -100,26 +103,40 @@ extension MapViewController{
     fileprivate func bindingData(){
         chosenBus
             .asObservable()
+            .subscribe(onNext: {[weak self] bus in
+                if let bus = bus{
+                    self?.title = bus.busNumber
+                    self?.whiteBox.isHidden = false
+                }else{
+                    self?.whiteBox.isHidden = true
+                    self?.navigationItem.title = Strings.kChooseABus
+                }
+            })
+            .addDisposableTo(disposeBag)
+        
+        let busObservable = chosenBus
+            .asObservable()
+            .filter{ return ($0 != nil) }
+        
+        busObservable
             .map { bus -> [String] in
-                return bus.busStops.normalStops.map({ (busStop) -> String in
+                return bus!.busStops.normalStops.map({ (busStop) -> String in
                     return busStop.name
                 })
             }
             .bind(to: destinationsDescrip)
             .addDisposableTo(disposeBag)
         
-        chosenBus
-            .asObservable()
+        busObservable
             .map { bus -> [BusStop] in
-                return bus.busStops.normalStops
+                return bus!.busStops.normalStops
             }
             .bind(to: busStops)
             .addDisposableTo(disposeBag)
         
-        chosenBus
-            .asObservable()
+        busObservable
             .map{bus -> BusStop? in
-                return bus.busStops.destinationBusStop
+                return bus!.busStops.destinationBusStop
             }
             .filter({return ($0 != nil)})
             .subscribe(onNext: { [weak self] destinationBusStop in
@@ -194,8 +211,9 @@ extension MapViewController{
         // adding polyline for routes
         chosenBus
             .asObservable()
+            .filter{return ($0 != nil)}
             .map { bus -> [CLLocationCoordinate2D] in
-                return bus.routes.map({ (altitude, longtitude) -> CLLocationCoordinate2D in
+                return bus!.routes.map({ (altitude, longtitude) -> CLLocationCoordinate2D in
                     return CLLocationCoordinate2D(latitude: altitude, longitude: longtitude)
                 })
             }
@@ -423,7 +441,7 @@ extension MapViewController : CLLocationManagerDelegate{
         notificationContent.title = Strings.kAttention
         notificationContent.body = Strings.kAlmostArrived
         notificationContent.sound = UNNotificationSound.default()
-        let timeScheduleNotification = UNTimeIntervalNotificationTrigger(timeInterval: 0.0, repeats: false)
+        let timeScheduleNotification = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
     
         let notificationRequest = UNNotificationRequest(identifier: Identifiers.kLocationNotification, content: notificationContent, trigger: timeScheduleNotification)
         UNUserNotificationCenter.current().add(notificationRequest, withCompletionHandler: nil)
@@ -435,6 +453,7 @@ extension MapViewController : CLLocationManagerDelegate{
 
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         addNotification()
+        stopMonitoring()
     }
 }
 
