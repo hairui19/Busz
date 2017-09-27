@@ -13,5 +13,8 @@ struct Identifiers {
     static let kDestinationBusStopAnnotationView = "DestinationBusStopAnnotationView"
     static let kMonitoringRegion = "MonitoringRegion"
     static let kLocationNotification = "LocationNotification"
+    static let kBusArrivalCell = "BusArrivalCell"
+    static let kDestinationCell = "DestinationCell"
+    static let kBusArrivalHeader = "BusArrivalHeader"
     
 }
