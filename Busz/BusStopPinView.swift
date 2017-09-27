@@ -20,6 +20,7 @@ class BusStopPinView: MKAnnotationView {
         image = UIImage(named: "busStopPinImage")
         canShowCallout = true
         rightCalloutAccessoryView = customRightCalloutAccessoryView()
+        leftCalloutAccessoryView = customLeftCalloutAccessoryView()
         
     }
     
@@ -28,6 +29,14 @@ class BusStopPinView: MKAnnotationView {
         button.frame = CGRect(x: 0, y: 0, width: 25, height: 41)
         //button.layer.cornerRadius = 23/2
         button.setImage(UIImage(named: "destinationBusStop"), for: .normal)
+        return button
+    }
+    
+    func customLeftCalloutAccessoryView() -> UIButton{
+        let button = UIButton(type: .custom)
+        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        //button.layer.cornerRadius = 23/2
+        button.setImage(UIImage(named: "busArrivingTimeImage"), for: .normal)
         return button
     }
 
