@@ -30,9 +30,4 @@ struct BusStop {
         self.coordinate = (altitude,longitude)
     }
     
-    static let dummyBusStop = BusStop(busStopCode: "", busStopInfo: [
-        "lat" : "1000",
-        "lng" : "1000",
-        "name" : ""
-        ])!
 }
