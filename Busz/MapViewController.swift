@@ -105,7 +105,7 @@ extension MapViewController{
             .asObservable()
             .subscribe(onNext: {[weak self] bus in
                 if let bus = bus{
-                    self?.title = bus.busNumber
+                    self?.navigationItem.title = bus.busNumber
                     self?.whiteBox.isHidden = false
                 }else{
                     self?.whiteBox.isHidden = true
