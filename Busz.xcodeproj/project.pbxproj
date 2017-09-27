@@ -11,6 +11,7 @@
 		71565D011F7AAECD008CDCBE /* default-alarm.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 71565D001F7AAECD008CDCBE /* default-alarm.aiff */; };
 		71565D031F7AB40F008CDCBE /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D021F7AB40F008CDCBE /* Strings.swift */; };
 		71565D051F7AB4DA008CDCBE /* Identifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D041F7AB4DA008CDCBE /* Identifiers.swift */; };
+		71565D0C1F7BC176008CDCBE /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D0B1F7BC175008CDCBE /* Date+Extension.swift */; };
 		7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE051F74C7FB00CF516A /* AppDelegate.swift */; };
 		7185BE081F74C7FB00CF516A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE071F74C7FB00CF516A /* ViewController.swift */; };
 		7185BE0B1F74C7FB00CF516A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7185BE091F74C7FB00CF516A /* Main.storyboard */; };
@@ -499,6 +500,7 @@
 		71565D001F7AAECD008CDCBE /* default-alarm.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "default-alarm.aiff"; sourceTree = "<group>"; };
 		71565D021F7AB40F008CDCBE /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		71565D041F7AB4DA008CDCBE /* Identifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiers.swift; sourceTree = "<group>"; };
+		71565D0B1F7BC175008CDCBE /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		7185BE021F74C7FB00CF516A /* Busz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7185BE051F74C7FB00CF516A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7185BE071F74C7FB00CF516A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -1014,6 +1016,14 @@
 			name = Audio;
 			sourceTree = "<group>";
 		};
+		71565D0D1F7BC181008CDCBE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				71565D0B1F7BC175008CDCBE /* Date+Extension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		7185BDF91F74C7FA00CF516A = {
 			isa = PBXGroup;
 			children = (
@@ -1524,6 +1534,7 @@
 			isa = PBXGroup;
 			children = (
 				7185BE051F74C7FB00CF516A /* AppDelegate.swift */,
+				71565D0D1F7BC181008CDCBE /* Extensions */,
 				71BDE1721F7658BD000C586B /* Helpers */,
 				71BDE1711F76589E000C586B /* ViewControllers */,
 				71BDE1701F765899000C586B /* Models */,
@@ -2182,6 +2193,7 @@
 				7185C5F91F759BB700CF516A /* BusStop.swift in Sources */,
 				7185BE081F74C7FB00CF516A /* ViewController.swift in Sources */,
 				7185C5EE1F7553DF00CF516A /* Colors.swift in Sources */,
+				71565D0C1F7BC176008CDCBE /* Date+Extension.swift in Sources */,
 				7185C5F61F7588DD00CF516A /* BusSelectionCell.swift in Sources */,
 				7185C5EC1F75524B00CF516A /* MapViewController+UI.swift in Sources */,
 				7185C5E21F754B7F00CF516A /* MapViewController.swift in Sources */,
