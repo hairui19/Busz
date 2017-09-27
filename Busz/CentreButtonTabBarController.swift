@@ -43,7 +43,18 @@ class CentreButtonTabBarController: UITabBarController {
     
     func middleButtonPressed(){
         let busSelectionViewController = storyboard?.instantiateViewController(withIdentifier: "BusSelectionViewController") as! BusSelectionViewController
+        busSelectionViewController.delegate = self
         self.present(busSelectionViewController, animated: true, completion: nil)
     }
 
+}
+
+extension CentreButtonTabBarController : BusSelectionViewControllerDelegate{
+    func didFinishChoosingBus(_ bus: Bus) {
+        let navigationController = self.viewControllers?[2] as! UINavigationController
+        let mapViewController = navigationController.viewControllers[0] as! MapViewController
+        mapViewController.chosenBus.value = bus
+        self.selectedIndex = 2
+        self.dismiss(animated: true, completion: nil)
+    }
 }
