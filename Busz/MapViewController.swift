@@ -41,6 +41,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var destinationTextfield: UITextField!
     @IBOutlet weak var whiteBoxBottomContraint: NSLayoutConstraint!
     
+    @IBOutlet weak var setAlarmButton: UIButton!
     
     // MARK: - Life Cycle Functions
     override func viewDidLoad() {
@@ -59,6 +60,7 @@ class MapViewController: UIViewController {
     
     // MARK: IBActions.
     @IBAction func setAlarmButtonPressed(_ sender: UIButton) {
+        
     }
     
     
@@ -372,8 +374,34 @@ extension MapViewController{
                 self?.destinationTextfield.text = destinationAnnotaiton?.title ?? ""
             })
             .addDisposableTo(disposeBag)
+        
+        destinationAnnotationManager
+            .asObservable()
+            .map { manager -> Bool in
+                if manager.currentDestionationAnnotation == nil {
+                    return false
+
+                }else{
+                    return true
+                }
+            }
+            .subscribe(onNext: { [weak self] isEnable in
+                self?.setAlarmButton.isEnabled = isEnable
+                if isEnable {
+                    self?.setAlarmButton.setTitleColor(.black, for: .normal)
+                }else{
+                    self?.setAlarmButton.setTitleColor(.lightGray, for: .normal)
+                }
+            })
+            .addDisposableTo(disposeBag)
 
         // use a button to set
+        setAlarmButton.rx.controlEvent(.touchUpInside)
+            .asObservable()
+            .subscribe(onNext: { _ in
+                print("i am clicked")
+            })
+            .addDisposableTo(disposeBag)
     }
     
     func busStopAnnotationFromDestionationAnnotation(_ destionationAnnotation : DestinationBusStopAnnotation) -> BusStopAnnotation{
