@@ -9,6 +9,8 @@
 import Foundation
 
 struct Strings {
+    static let kRouteOne = "1"
+    static let kRouteTwo = "2"
     static let kWarning = "Warning"
     static let kError = "Error"
     static let kAttention = "Attention"
