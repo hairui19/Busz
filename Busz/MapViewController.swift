@@ -295,7 +295,7 @@ extension MapViewController{
     func keyboardWillShow(notification : NSNotification){
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
             addAnimation(animationTime : 0.5, layoutChanges: { [weak self] in
-                self?.whiteBoxBottomContraint.constant = keyboardSize.height + 5
+                self?.whiteBoxBottomContraint.constant = keyboardSize.height + 5 - 49
                 self?.view.layoutIfNeeded()
                 
             })
@@ -314,7 +314,7 @@ extension MapViewController{
     func tapToEndEditing(){
         if destinationTextfield.isFirstResponder {
             addAnimation(animationTime: 0.4, layoutChanges: { [weak self] in
-                self?.whiteBoxBottomContraint.constant = 30
+                self?.whiteBoxBottomContraint.constant = 40
                 self?.view.layoutIfNeeded()
                 
             })
