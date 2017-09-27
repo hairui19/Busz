@@ -10,8 +10,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class BusSelectionViewController: UIViewController {
+protocol BusSelectionViewControllerDelegate : class {
+    func didFinishChoosingBus(_ bus : Bus)
+}
 
+class BusSelectionViewController: UIViewController {
     
     // MARK: - Properties
     fileprivate let busSelectionCell = "BusSelectionCell"
@@ -22,6 +25,9 @@ class BusSelectionViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    
+    // delegate 
+    weak var delegate : BusSelectionViewControllerDelegate?
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -79,9 +85,11 @@ extension BusSelectionViewController : UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bus = buses.value[indexPath.row]
-        let mapViewController = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
-        mapViewController.chosenBus.value = bus
-        self.navigationController?.pushViewController(mapViewController, animated: true)
+        if let delegate = delegate {
+            delegate.didFinishChoosingBus(bus)
+        }else{
+            print("delegate not set in SelectionBusViewController")
+        }
        
     }
 }
