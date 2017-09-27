@@ -85,6 +85,7 @@ extension BusSelectionViewController : UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bus = buses.value[indexPath.row]
+        view.endEditing(true)
         if let delegate = delegate {
             delegate.didFinishChoosingBus(bus)
         }else{
