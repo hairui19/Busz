@@ -24,13 +24,15 @@ class MapViewController: UIViewController {
     fileprivate let chosenDestination = Variable<DestinationBusStopAnnotation?>(nil)
     
     let disposeBag = DisposeBag()
-    let fileReader = FileReader()
+    let fileReader = FileReader.share
+    let apiClient = APIClient.share
     fileprivate let locationManager = CLLocationManager()
     
     //input
     let chosenBus = Variable<Bus?>(nil)
     fileprivate let updatedBus = Variable<Bus?>(nil)
     fileprivate let notificationRadius : CLLocationDegrees = 150
+    fileprivate let estimatedTime = Variable<String?>(nil)
     
     // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -179,6 +181,21 @@ extension MapViewController{
             .subscribe(onNext: { [weak self] destinationBusStop in
                 let destionationAnnotation = DestinationBusStopAnnotation(title: destinationBusStop!.name, busStopCode: destinationBusStop!.busStopCode, coordinate: destinationBusStop!.coordinate)
                 self?.destinationAnnotationManager.value.update(destionationAnnotation)
+            })
+            .addDisposableTo(disposeBag)
+        
+        
+        estimatedTime
+            .asObservable()
+            .skip(1)
+            .subscribe(onNext: {[weak self] estimatedTimeMessage in
+                if let estimatedTimeMessage = estimatedTimeMessage{
+                    Utility.showAlert(in: self!, title: estimatedTimeMessage, message: "soemthing", addAction: {
+                        print("hello world")
+                    })
+                }else{
+                    Utility.showAlert(in: self!, title: Strings.kArrivalDataNotAvailable, message: Strings.kTryAgainlater)
+                }
             })
             .addDisposableTo(disposeBag)
         
@@ -480,16 +497,35 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if view is BusStopPinView{
-            guard let annotation = view.annotation as? BusStopAnnotation else{
+        if control == view.rightCalloutAccessoryView{
+            if view is BusStopPinView{
+                guard let annotation = view.annotation as? BusStopAnnotation else{
+                    return
+                }
+                let destinationBusStopAnnotation = DestinationBusStopAnnotation(title: (annotation.title ?? "")!, busStopCode: (annotation.subtitle ?? "")!, coordinate: (annotation.coordinate.latitude, annotation.coordinate.longitude))
+                destinationAnnotationManager.value.update(destinationBusStopAnnotation)
+            }
+            
+            if view is DestinationBusStopPinView {
+                destinationAnnotationManager.value.remove()
+            }
+        }else{
+            checkBusArrivingTime(view)
+        }
+    }
+    
+    func checkBusArrivingTime(_ view : MKAnnotationView){
+        if let annotation = view.annotation as? BusStopAnnotation{
+            guard let busStopCode = annotation.subtitle, let busStopName = annotation.title else {
+                Utility.showAlert(in: self, title: Strings.kArrivalDataNotAvailable, message: Strings.kTryAgainlater)
                 return
             }
-             let destinationBusStopAnnotation = DestinationBusStopAnnotation(title: (annotation.title ?? "")!, busStopCode: (annotation.subtitle ?? "")!, coordinate: (annotation.coordinate.latitude, annotation.coordinate.longitude))
-            destinationAnnotationManager.value.update(destinationBusStopAnnotation)
-        }
-        
-        if view is DestinationBusStopPinView {
-            destinationAnnotationManager.value.remove()
+            let busNumber = updatedBus.value!.busNumber
+            apiClient.getBusArrivalTime(busStopCode: busStopCode, serviceNo: busNumber, busStopName: busStopName)
+                .asObservable()
+                .observeOn(MainScheduler.instance)
+                .bind(to: estimatedTime)
+                .addDisposableTo(disposeBag)
         }
     }
 }
@@ -553,16 +589,18 @@ extension MapViewController{
     func getRightBarButton() -> UIBarButtonItem {
         let bmb = BoomMenuButton.init(frame: CGRect.init(x: 0, y: 0, width: 60, height: 60))
         bmb.buttonEnum = .ham
-        bmb.piecePlaceEnum =  .ham_4
-        bmb.buttonPlaceEnum = .ham_4
+        bmb.piecePlaceEnum =  .ham_2
+        bmb.buttonPlaceEnum = .ham_2
         
-        for _ in 0..<2{
+        for i in 0..<2{
             let builder = HamButtonBuilder.init()
             builder.pieceColor = Colors.mediumPink
             builder.normalColor = Colors.mediumPink
-            builder.normalImageName = "butterfly"
-            builder.normalText = "Text"
-            builder.normalSubText = "Sub Text"
+            if i == 0 {
+                builder.normalText = "Route 1"
+            }else{
+                builder.normalText = "Route 2"
+            }
             builder.clickedClosure = {[weak self] (index: Int) -> Void in
                 if index == 0 {
                     self?.loadData(routeNumber: Strings.kRouteOne)
@@ -572,21 +610,11 @@ extension MapViewController{
                     self?.loadData(routeNumber: Strings.kRouteTwo)
                 }
             }
-            
-            bmb.addBuilder(builder)
-        }
-        
-        for _ in 0..<2{
-            let builder = HamButtonBuilder.init()
-            builder.pieceColor = Colors.mediumPuprple
-            builder.normalColor = Colors.mediumPuprple
-            builder.normalImageName = "butterfly"
-            builder.normalText = "Text"
-            builder.normalSubText = "Sub Text"
-            builder.clickedClosure = { (index: Int) -> Void in
-                print("index2 = \(index)")
-            }
-            
+            builder.width = 150
+            builder.height = 60
+            builder.shadowPathRect = CGRect.init(x: 2, y: 2, width: 150, height: 60)
+            builder.textAlignment = NSTextAlignment.center
+            builder.textFrame = CGRect.init(x: 0, y: 0, width: 150, height: 60)
             bmb.addBuilder(builder)
         }
         bmb.hasBackground = false
