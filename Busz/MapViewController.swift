@@ -20,6 +20,7 @@ class MapViewController: UIViewController {
     fileprivate let busStops = Variable<[BusStop]>([])
     fileprivate let destinationsDescrip = Variable<[String]>([])
     fileprivate let destinationAnnotationManager = Variable<DestinationAnnotationManager>(DestinationAnnotationManager())
+    fileprivate let chosenDestination = Variable<DestinationBusStopAnnotation?>(nil)
     
     let disposeBag = DisposeBag()
     fileprivate let fileReader = FileReader()
@@ -92,7 +93,7 @@ class MapViewController: UIViewController {
     }
     
     fileprivate func zoomToLocation(with coordinate : CLLocationCoordinate2D){
-        let region = MKCoordinateRegionMakeWithDistance(coordinate, 1000, 1000)
+        let region = MKCoordinateRegionMakeWithDistance(coordinate, 2000, 2000)
         mapView.setRegion(region, animated: true)
     }
     
@@ -280,6 +281,17 @@ extension MapViewController{
                     let busStopAnnotaitonToBeDeleted = self!.busStopAnnotationFromDestionationAnnotation(currentAnnotation!)
                      self?.mapView.removeAnnotation(busStopAnnotaitonToBeDeleted)
                 }
+            })
+            .addDisposableTo(disposeBag)
+        
+        destinationAnnotationManager
+            .asObservable()
+            .map { (manager) -> DestinationBusStopAnnotation? in
+                return manager.currentDestionationAnnotation
+            }
+            .subscribe(onNext: { [weak self] destinationAnnotaiton in
+                self?.chosenDestination.value = destinationAnnotaiton
+                self?.destinationTextfield.text = destinationAnnotaiton?.title ?? ""
             })
             .addDisposableTo(disposeBag)
 
