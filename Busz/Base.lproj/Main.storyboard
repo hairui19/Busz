@@ -189,9 +189,6 @@
                                         <state key="normal" title="Set Alarm">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
-                                        <connections>
-                                            <action selector="setAlarmButtonPressed:" destination="UQT-8w-z8u" eventType="touchUpInside" id="yfb-uJ-486"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -235,6 +232,7 @@
                         <outlet property="destinationPicker" destination="Swt-ii-4TO" id="oTQ-cp-t7y"/>
                         <outlet property="destinationTextfield" destination="ns0-nU-BSj" id="Toh-Jj-Box"/>
                         <outlet property="mapView" destination="Mu7-au-mky" id="dqH-xk-a4M"/>
+                        <outlet property="setAlarmButton" destination="59S-jC-Nl4" id="r5r-I2-cvA"/>
                         <outlet property="whiteBox" destination="5xx-h3-1Fy" id="T74-Ci-twW"/>
                         <outlet property="whiteBoxBottomContraint" destination="5YY-i7-nu9" id="evT-Hz-Lt2"/>
                     </connections>
