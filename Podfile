@@ -8,5 +8,6 @@ target 'Busz' do
   # Pods for Busz
   pod 'RxSwift',    '~> 3.0'
   pod 'RxCocoa',    '~> 3.0'
+  pod "VHBoomMenuButton/Swift"
 
 end
