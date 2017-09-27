@@ -12,6 +12,7 @@ import RxCocoa
 import RxSwift
 import CoreLocation
 import UserNotifications
+import VHBoomMenuButton
 
 class MapViewController: UIViewController {
     
@@ -23,7 +24,7 @@ class MapViewController: UIViewController {
     fileprivate let chosenDestination = Variable<DestinationBusStopAnnotation?>(nil)
     
     let disposeBag = DisposeBag()
-    fileprivate let fileReader = FileReader()
+    let fileReader = FileReader()
     fileprivate let locationManager = CLLocationManager()
     
     //input
@@ -42,7 +43,7 @@ class MapViewController: UIViewController {
     // MARK: - Life Cycle Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadData()
+        loadData(routeNumber: Strings.kRouteOne)
         setupUI()
         addNotifications()
         addTapToDismissEditingGesture()
@@ -67,12 +68,14 @@ class MapViewController: UIViewController {
     }
     
     // MARK: - Helper Functions
-    fileprivate func loadData(){
+    fileprivate func loadData(routeNumber : String){
+        
         chosenBus
             .asObservable()
             .filter{return ($0 != nil)}
             .subscribe(onNext: {[weak self] bus in
-                self?.fileReader.route(number: "1", bus: bus!)
+                self?.navigationItem.title =  "Bus \(bus!.busNumber) - Route \(routeNumber)"
+                self?.fileReader.route(number: routeNumber, bus: bus!)
                     .bind(to: self!.updatedBus)
                     .addDisposableTo(self!.disposeBag)
             })
@@ -117,21 +120,36 @@ extension MapViewController{
         chosenBus
             .asObservable()
             .subscribe(onNext: {[weak self] bus in
-                
                 if let bus = bus{
-                    self?.navigationItem.title =  "Bus:\(bus.busNumber)"
+                    self?.navigationItem.title =  "Bus \(bus.busNumber) - Route \(Strings.kRouteOne)"
                     self?.whiteBox.isHidden = false
+                    self?.navigationItem.rightBarButtonItem = self?.getRightBarButton()
                     
                 }else{
                     self?.whiteBox.isHidden = true
                     self?.navigationItem.title = Strings.kChooseABus
+                    self?.navigationItem.rightBarButtonItem = nil
                 }
             })
             .addDisposableTo(disposeBag)
         
-        let busObservable = updatedBus
+        updatedBus
             .asObservable()
             .filter{ return ($0 != nil) }
+            .map { [weak self] bus -> Void in
+                if !(bus!.routes.count > 0) {
+                    Utility.showAlert(in: self!, title: "This bus has no second route")
+                    self?.navigationItem.title =  "Bus \(bus!.busNumber) - Route \(Strings.kRouteOne)"
+                }
+            }
+            .subscribe()
+            .addDisposableTo(disposeBag)
+        
+        let busObservable = updatedBus
+            .asObservable()
+            .filter{ return ($0 != nil && $0!.routes.count > 0) }
+        
+        
         
         busObservable
             .map { bus -> [String] in
@@ -380,6 +398,7 @@ extension MapViewController{
 extension MapViewController{
     fileprivate func addTapToDismissEditingGesture(){
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapToEndEditing))
+        tapGesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGesture)
     }
     
@@ -529,6 +548,52 @@ extension MapViewController : CLLocationManagerDelegate{
     }
 }
 
+
+extension MapViewController{
+    func getRightBarButton() -> UIBarButtonItem {
+        let bmb = BoomMenuButton.init(frame: CGRect.init(x: 0, y: 0, width: 60, height: 60))
+        bmb.buttonEnum = .ham
+        bmb.piecePlaceEnum =  .ham_4
+        bmb.buttonPlaceEnum = .ham_4
+        
+        for _ in 0..<2{
+            let builder = HamButtonBuilder.init()
+            builder.pieceColor = Colors.mediumPink
+            builder.normalColor = Colors.mediumPink
+            builder.normalImageName = "butterfly"
+            builder.normalText = "Text"
+            builder.normalSubText = "Sub Text"
+            builder.clickedClosure = {[weak self] (index: Int) -> Void in
+                if index == 0 {
+                    self?.loadData(routeNumber: Strings.kRouteOne)
+                }
+                
+                if index == 1{
+                    self?.loadData(routeNumber: Strings.kRouteTwo)
+                }
+            }
+            
+            bmb.addBuilder(builder)
+        }
+        
+        for _ in 0..<2{
+            let builder = HamButtonBuilder.init()
+            builder.pieceColor = Colors.mediumPuprple
+            builder.normalColor = Colors.mediumPuprple
+            builder.normalImageName = "butterfly"
+            builder.normalText = "Text"
+            builder.normalSubText = "Sub Text"
+            builder.clickedClosure = { (index: Int) -> Void in
+                print("index2 = \(index)")
+            }
+            
+            bmb.addBuilder(builder)
+        }
+        bmb.hasBackground = false
+        return UIBarButtonItem(customView: bmb)
+    }
+
+}
 
 
 
