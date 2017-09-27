@@ -30,6 +30,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setUpClicksOnImages()
+        pullToRefresh()
     }
     
     private func setUpClicksOnImages(){
@@ -57,11 +58,14 @@ class MainViewController: UIViewController {
     }
     
     func pullToRefresh(){
-        let refreshControl = collectionView.refreshControl!
+        let refreshControl = UIRefreshControl()
+        refreshControl.backgroundColor = .clear
         refreshControl.backgroundColor = UIColor(white: 0.98, alpha: 1.0)
         refreshControl.tintColor = UIColor.darkGray
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+        collectionView.refreshControl?.backgroundColor = .clear
     }
     
     func refresh(){
@@ -97,7 +101,13 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let headerview = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: Identifiers.kBusArrivalHeader, for: indexPath) as! BusArrivalHeader
-        headerview.titleLabel.text = "Hairui"
+        if isBusArrivalTab{
+            headerview.titleLabel.text = "Arrival Time"
+            headerview.titleLabel.textColor = Colors.heavyPurple
+        }else{
+            headerview.titleLabel.text = "Past Destinations"
+             headerview.titleLabel.textColor = Colors.mediumPuprple
+        }
         return headerview
     }
     
