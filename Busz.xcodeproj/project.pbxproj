@@ -12,6 +12,13 @@
 		71565D031F7AB40F008CDCBE /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D021F7AB40F008CDCBE /* Strings.swift */; };
 		71565D051F7AB4DA008CDCBE /* Identifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D041F7AB4DA008CDCBE /* Identifiers.swift */; };
 		71565D0C1F7BC176008CDCBE /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D0B1F7BC175008CDCBE /* Date+Extension.swift */; };
+		71565D0F1F7BFD69008CDCBE /* MainViewController+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D0E1F7BFD69008CDCBE /* MainViewController+UI.swift */; };
+		71565D161F7C0152008CDCBE /* BusArrivalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D141F7C0152008CDCBE /* BusArrivalCell.swift */; };
+		71565D171F7C0152008CDCBE /* BusArrivalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71565D151F7C0152008CDCBE /* BusArrivalCell.xib */; };
+		71565D1A1F7C0625008CDCBE /* BusArrivalHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D181F7C0625008CDCBE /* BusArrivalHeader.swift */; };
+		71565D1B1F7C0625008CDCBE /* BusArrivalHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71565D191F7C0625008CDCBE /* BusArrivalHeader.xib */; };
+		71565D1E1F7C0AD4008CDCBE /* DestinationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D1C1F7C0AD4008CDCBE /* DestinationCell.swift */; };
+		71565D1F1F7C0AD4008CDCBE /* DestinationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71565D1D1F7C0AD4008CDCBE /* DestinationCell.xib */; };
 		7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE051F74C7FB00CF516A /* AppDelegate.swift */; };
 		7185BE081F74C7FB00CF516A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE071F74C7FB00CF516A /* MainViewController.swift */; };
 		7185BE0B1F74C7FB00CF516A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7185BE091F74C7FB00CF516A /* Main.storyboard */; };
@@ -501,6 +508,13 @@
 		71565D021F7AB40F008CDCBE /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		71565D041F7AB4DA008CDCBE /* Identifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiers.swift; sourceTree = "<group>"; };
 		71565D0B1F7BC175008CDCBE /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		71565D0E1F7BFD69008CDCBE /* MainViewController+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MainViewController+UI.swift"; sourceTree = "<group>"; };
+		71565D141F7C0152008CDCBE /* BusArrivalCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusArrivalCell.swift; sourceTree = "<group>"; };
+		71565D151F7C0152008CDCBE /* BusArrivalCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusArrivalCell.xib; sourceTree = "<group>"; };
+		71565D181F7C0625008CDCBE /* BusArrivalHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusArrivalHeader.swift; sourceTree = "<group>"; };
+		71565D191F7C0625008CDCBE /* BusArrivalHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusArrivalHeader.xib; sourceTree = "<group>"; };
+		71565D1C1F7C0AD4008CDCBE /* DestinationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationCell.swift; sourceTree = "<group>"; };
+		71565D1D1F7C0AD4008CDCBE /* DestinationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DestinationCell.xib; sourceTree = "<group>"; };
 		7185BE021F74C7FB00CF516A /* Busz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7185BE051F74C7FB00CF516A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7185BE071F74C7FB00CF516A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -1524,8 +1538,14 @@
 			children = (
 				71BDE5071F78A179000C586B /* BusStopPinView.swift */,
 				71BDE50B1F78AE8D000C586B /* DestinationBusStopPinView.swift */,
+				71565D181F7C0625008CDCBE /* BusArrivalHeader.swift */,
+				71565D191F7C0625008CDCBE /* BusArrivalHeader.xib */,
 				7185C5F41F7588DD00CF516A /* BusSelectionCell.swift */,
 				7185C5F51F7588DD00CF516A /* BusSelectionCell.xib */,
+				71565D141F7C0152008CDCBE /* BusArrivalCell.swift */,
+				71565D151F7C0152008CDCBE /* BusArrivalCell.xib */,
+				71565D1C1F7C0AD4008CDCBE /* DestinationCell.swift */,
+				71565D1D1F7C0AD4008CDCBE /* DestinationCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1565,6 +1585,7 @@
 				7185C5E11F754B7F00CF516A /* MapViewController.swift */,
 				7185C5EB1F75524B00CF516A /* MapViewController+UI.swift */,
 				7185BE071F74C7FB00CF516A /* MainViewController.swift */,
+				71565D0E1F7BFD69008CDCBE /* MainViewController+UI.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1860,6 +1881,7 @@
 				71BDE3F31F77A459000C586B /* 141.json in Resources */,
 				71BDE5011F77A45A000C586B /* NR8.json in Resources */,
 				71BDE3BA1F77A459000C586B /* 93.json in Resources */,
+				71565D171F7C0152008CDCBE /* BusArrivalCell.xib in Resources */,
 				71BDE3711F77A459000C586B /* 36A.json in Resources */,
 				71BDE4631F77A45A000C586B /* 269.json in Resources */,
 				71BDE33C1F77A459000C586B /* 1N.json in Resources */,
@@ -1981,6 +2003,7 @@
 				71BDE4891F77A45A000C586B /* 403.json in Resources */,
 				71BDE4301F77A45A000C586B /* 190.json in Resources */,
 				71BDE48D1F77A45A000C586B /* 410G.json in Resources */,
+				71565D1B1F7C0625008CDCBE /* BusArrivalHeader.xib in Resources */,
 				71BDE38E1F77A459000C586B /* 60.json in Resources */,
 				71BDE3AF1F77A459000C586B /* 85.json in Resources */,
 				71BDE4AD1F77A45A000C586B /* 856A.json in Resources */,
@@ -2053,6 +2076,7 @@
 				71BDE4471F77A45A000C586B /* 235.json in Resources */,
 				71BDE48F1F77A45A000C586B /* 502.json in Resources */,
 				71BDE3941F77A459000C586B /* 64.json in Resources */,
+				71565D1F1F7C0AD4008CDCBE /* DestinationCell.xib in Resources */,
 				71BDE4451F77A45A000C586B /* 231.json in Resources */,
 				71BDE4BF1F77A45A000C586B /* 903.json in Resources */,
 				71BDE3B01F77A459000C586B /* 86.json in Resources */,
@@ -2188,8 +2212,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				71BDE5041F77CA38000C586B /* Utility.swift in Sources */,
+				71565D1A1F7C0625008CDCBE /* BusArrivalHeader.swift in Sources */,
 				71BDE50E1F79E511000C586B /* BusStops.swift in Sources */,
 				71BDE5081F78A179000C586B /* BusStopPinView.swift in Sources */,
+				71565D0F1F7BFD69008CDCBE /* MainViewController+UI.swift in Sources */,
 				7185C5F91F759BB700CF516A /* BusStop.swift in Sources */,
 				7185BE081F74C7FB00CF516A /* MainViewController.swift in Sources */,
 				7185C5EE1F7553DF00CF516A /* Colors.swift in Sources */,
@@ -2197,8 +2223,10 @@
 				7185C5F61F7588DD00CF516A /* BusSelectionCell.swift in Sources */,
 				7185C5EC1F75524B00CF516A /* MapViewController+UI.swift in Sources */,
 				7185C5E21F754B7F00CF516A /* MapViewController.swift in Sources */,
+				71565D161F7C0152008CDCBE /* BusArrivalCell.swift in Sources */,
 				71BDE1741F77825A000C586B /* BusStopAnnotation.swift in Sources */,
 				71565D051F7AB4DA008CDCBE /* Identifiers.swift in Sources */,
+				71565D1E1F7C0AD4008CDCBE /* DestinationCell.swift in Sources */,
 				7185C5F11F7584DF00CF516A /* BusSelectionViewController.swift in Sources */,
 				71BDE5061F77FF4B000C586B /* CentreButtonTabBarController.swift in Sources */,
 				7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */,
