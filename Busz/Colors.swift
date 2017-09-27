@@ -14,6 +14,9 @@ struct Colors {
     static let yellow = UIColor(r: 255, g: 211, b: 181, alpha: 1)
     static let lightGreen = UIColor(r: 220, g: 237, b: 194, alpha: 1)
     static let heavyGreen = UIColor(r: 168, g: 230, b: 206, alpha: 1)
+    
+    static let mediumPink = UIColor(r: 255, g: 96, b: 119, alpha: 1)
+    static let mediumPuprple = UIColor(r: 207, g: 97, b: 131, alpha: 1)
 }
 
 
