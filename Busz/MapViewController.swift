@@ -27,6 +27,7 @@ class MapViewController: UIViewController {
     
     //input
     let chosenBus = Variable<Bus?>(nil)
+    fileprivate let updatedBus = Variable<Bus?>(nil)
     fileprivate let notificationRadius : CLLocationDegrees = 150
     
     // IBOutlets
@@ -66,12 +67,16 @@ class MapViewController: UIViewController {
     
     // MARK: - Helper Functions
     fileprivate func loadData(){
-        if let bus = chosenBus.value{
-            fileReader.routeFor(bus: bus)
-                .debug()
-                .bind(to: chosenBus)
-                .addDisposableTo(disposeBag)
-        }
+        chosenBus
+            .asObservable()
+            .filter{return ($0 != nil)}
+            .subscribe(onNext: {[weak self] bus in
+                self?.fileReader.routeFor(bus: bus!)
+                    .debug()
+                    .bind(to: self!.updatedBus)
+                    .addDisposableTo(self!.disposeBag)
+            })
+            .addDisposableTo(disposeBag)
     }
     
     fileprivate func getRowForSearchText(searchText : String) -> Int{
@@ -91,6 +96,11 @@ class MapViewController: UIViewController {
         mapView.setRegion(region, animated: true)
     }
     
+    fileprivate func removeAllAnnotations(){
+        let annotations = mapView.annotations
+        mapView.removeAnnotations(annotations)
+    }
+    
 }
 
 //MARK: - RxSwift and Bidning
@@ -104,9 +114,11 @@ extension MapViewController{
         chosenBus
             .asObservable()
             .subscribe(onNext: {[weak self] bus in
+                
                 if let bus = bus{
                     self?.navigationItem.title = bus.busNumber
                     self?.whiteBox.isHidden = false
+                    
                 }else{
                     self?.whiteBox.isHidden = true
                     self?.navigationItem.title = Strings.kChooseABus
@@ -114,7 +126,7 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
-        let busObservable = chosenBus
+        let busObservable = updatedBus
             .asObservable()
             .filter{ return ($0 != nil) }
         
@@ -124,7 +136,11 @@ extension MapViewController{
                     return busStop.name
                 })
             }
-            .bind(to: destinationsDescrip)
+            .subscribe(onNext: { [weak self] strings in
+                self?.destinationsDescrip.value = strings
+                self?.destinationTextfield.text = ""
+                self?.destinationPicker.reloadAllComponents()
+            })
             .addDisposableTo(disposeBag)
         
         busObservable
@@ -233,6 +249,7 @@ extension MapViewController{
                 })
             }
             .subscribe(onNext: { [weak self] annotations in
+                self?.removeAllAnnotations()
                 self?.mapView.addAnnotations(annotations)
             })
             .addDisposableTo(disposeBag)
