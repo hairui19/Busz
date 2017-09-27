@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         locationManager.requestAlwaysAuthorization()
         
         // setup local notification.
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [Identifiers.kLocationNotification])
         notificationCenter.removeAllPendingNotificationRequests()
         notificationCenter.delegate = self
         setupGeofencingNotification()
