@@ -18,13 +18,17 @@ class DestinationCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        busNumberLabel.textColor = Colors.mediumPuprple
+        busStopNameLabel.textColor = Colors.mediumPuprple
+        busStopCode.textColor = Colors.mediumPuprple
         self.backgroundColor = .white
         self.layer.cornerRadius = 10
         self.layer.shadowRadius = 5
         self.layer.shadowColor = UIColor.lightGray.cgColor
         self.layer.shadowOpacity = 1
         self.layer.shadowOffset = CGSize(width: 1, height: 1)
-        self.layer.shadowColor = Colors.heavyPurple.cgColor
+        self.layer.shadowColor = Colors.mediumPuprple.cgColor
         self.clipsToBounds = false
         self.layer.masksToBounds = false
     }
