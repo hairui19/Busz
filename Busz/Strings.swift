@@ -19,4 +19,6 @@ struct Strings {
     static let kGeoFencingFeatureNotAvailable = "Geofencing feature is not supported on this device"
     static let kAllowNotificationAccess = "Please enable Notification for Busz for the device to receive notifications"
     static let kChooseABus = "Choose A Bus"
+    static let kTryAgainlater = "Please try again later"
+    static let kArrivalDataNotAvailable = "Arrival data is NOT available"
 }
