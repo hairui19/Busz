@@ -214,7 +214,7 @@
                                 </constraints>
                             </pickerView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="778-nN-9Ed">
-                                <rect key="frame" x="107" y="567" width="200" height="60"/>
+                                <rect key="frame" x="107" y="577" width="200" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="J8H-oN-gYg"/>
                                     <constraint firstAttribute="width" constant="200" id="iJ1-4x-EhX"/>
@@ -235,8 +235,8 @@
                             <constraint firstItem="Swt-ii-4TO" firstAttribute="leading" secondItem="5xx-h3-1Fy" secondAttribute="leading" id="MwT-sX-w4p"/>
                             <constraint firstItem="pPZ-ys-WAr" firstAttribute="top" secondItem="Mu7-au-mky" secondAttribute="bottom" id="QMh-zV-SQD"/>
                             <constraint firstItem="Mu7-au-mky" firstAttribute="top" secondItem="Qwi-9f-Jzy" secondAttribute="bottom" id="TfL-mY-cRZ"/>
-                            <constraint firstItem="778-nN-9Ed" firstAttribute="centerY" secondItem="Cn1-qx-5tu" secondAttribute="centerY" id="aMd-Cv-YkX"/>
                             <constraint firstItem="5xx-h3-1Fy" firstAttribute="centerX" secondItem="hC9-Oo-VHw" secondAttribute="centerX" id="ayn-5w-Yuv"/>
+                            <constraint firstItem="pPZ-ys-WAr" firstAttribute="top" secondItem="778-nN-9Ed" secondAttribute="bottom" constant="50" id="jhi-zg-cod"/>
                             <constraint firstAttribute="trailing" secondItem="Mu7-au-mky" secondAttribute="trailing" id="nYf-fv-gzn"/>
                         </constraints>
                     </view>
