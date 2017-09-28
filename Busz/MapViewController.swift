@@ -13,15 +13,17 @@ import RxSwift
 import CoreLocation
 import UserNotifications
 import VHBoomMenuButton
+import RealmSwift
 
 class MapViewController: UIViewController {
     
     // MARK: - Properties
-    
+    let realm = try! Realm()
     fileprivate let normalBusStops = Variable<[BusStop]>([])
     fileprivate let destinationsDescrip = Variable<[String]>([])
     fileprivate let destinationAnnotationManager = Variable<DestinationAnnotationManager>(DestinationAnnotationManager())
     fileprivate let chosenDestination = Variable<DestinationBusStopAnnotation?>(nil)
+    fileprivate let chosenBusStopForTimeArrivalCheck = Variable<BusStopAnnotation?>(nil)
     
     let disposeBag = DisposeBag()
     let fileReader = FileReader.share
@@ -186,19 +188,24 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
-        
-        estimatedTime
+        let estimatedTimeObservable =  estimatedTime
             .asObservable()
             .skip(1)
-            .subscribe(onNext: {[weak self] estimatedTimeMessage in
-                if let estimatedTimeMessage = estimatedTimeMessage{
-                    Utility.showAlert(in: self!, title: estimatedTimeMessage, message: "soemthing", addAction: {
-                        print("hello world")
-                    })
-                }else{
-                    Utility.showAlert(in: self!, title: Strings.kArrivalDataNotAvailable, message: Strings.kTryAgainlater)
-                }
-            })
+        let chosenBusForTimeArrivalCheckObservable = chosenBusStopForTimeArrivalCheck
+            .asObservable()
+            .filter{return ($0 != nil)}
+        
+        Observable.zip(estimatedTimeObservable, chosenBusForTimeArrivalCheckObservable) { [weak self](estimatedTimeMessage, chosenBusStopAnnotation) -> Void in
+            if let estimatedTimeMessage = estimatedTimeMessage{
+                Utility.showAlert(in: self!, title: estimatedTimeMessage, message: "something", addAction: {
+                    Utility.saveBusForArrival(busNumber: (self!.chosenBus.value?.busNumber)!, busStopCode: (chosenBusStopAnnotation?.subtitle)!, busStopName: (chosenBusStopAnnotation?.title)!)
+                })
+            }else{
+                Utility.showAlert(in: self!, title: Strings.kArrivalDataNotAvailable, message: Strings.kTryAgainlater)
+            }
+        }
+            .debug()
+            .subscribe()
             .addDisposableTo(disposeBag)
         
        
@@ -398,8 +405,8 @@ extension MapViewController{
         // use a button to set
         setAlarmButton.rx.controlEvent(.touchUpInside)
             .asObservable()
-            .subscribe(onNext: { _ in
-                print("i am clicked")
+            .subscribe(onNext: {[weak self] _ in
+                
             })
             .addDisposableTo(disposeBag)
     }
@@ -554,6 +561,8 @@ extension MapViewController : MKMapViewDelegate {
                 .observeOn(MainScheduler.instance)
                 .bind(to: estimatedTime)
                 .addDisposableTo(disposeBag)
+            
+            chosenBusStopForTimeArrivalCheck.value = annotation
         }
     }
 }
@@ -613,6 +622,7 @@ extension MapViewController : CLLocationManagerDelegate{
 }
 
 
+//MARK: Configured right barbutton
 extension MapViewController{
     func getRightBarButton() -> UIBarButtonItem {
         let bmb = BoomMenuButton.init(frame: CGRect.init(x: 0, y: 0, width: 60, height: 60))
