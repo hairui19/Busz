@@ -13,7 +13,7 @@ struct DestinationAnnotationManager {
     var previousDestionationAnnotation : DestinationBusStopAnnotation?
     var currentDestionationAnnotation : DestinationBusStopAnnotation?
     
-    mutating func update( _ destinationAnnotaion : DestinationBusStopAnnotation){
+    mutating func update( _ destinationAnnotaion : DestinationBusStopAnnotation?){
         previousDestionationAnnotation = currentDestionationAnnotation
         currentDestionationAnnotation = destinationAnnotaion
     }
