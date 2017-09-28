@@ -20,7 +20,7 @@ class BusArrivalCell: UICollectionViewCell {
     
     var busForDisplay : BusForDisplay?{
         didSet{
-            busNumberLabel.text = busForDisplay?.busNumber
+            busNumberLabel.text = "Bus \(busForDisplay!.busNumber)"
             busStopNameLabel.text = busForDisplay?.busStopName
             busCodeLabel.text = busForDisplay?.busStopCode
             apiClient.getBusArrivalTimeForDisplay(busStopCode: (busForDisplay?.busStopCode)!, serviceNo: (busForDisplay?.busNumber)!, busStopName: (busForDisplay?.busStopName)!)
