@@ -13,5 +13,7 @@ class BusForDestinations: Object {
     dynamic var busNumber = ""
     dynamic var busStopCode = ""
     dynamic var busStopName = ""
-     dynamic var timeStamp : Double = 0.0
+    dynamic var latitude : Double = 0.0
+    dynamic var longtitude : Double = 0.0
+    dynamic var timeStamp : Double = 0.0
 }
