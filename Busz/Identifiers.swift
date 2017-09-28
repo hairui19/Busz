@@ -11,6 +11,7 @@ import Foundation
 struct Identifiers {
     static let kNormalBusStopAnnotationView = "NormalBusAnnotationView"
     static let kDestinationBusStopAnnotationView = "DestinationBusStopAnnotationView"
+    static let kAlarmBusStopAnnotationView = "AlarmBusStopAnnotationView"
     static let kMonitoringRegion = "MonitoringRegion"
     static let kLocationNotification = "LocationNotification"
     static let kBusArrivalCell = "BusArrivalCell"
