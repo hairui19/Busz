@@ -22,5 +22,8 @@ struct Strings {
     static let kTryAgainlater = "Please try again later"
     static let kArrivalDataNotAvailable = "Arrival data is NOT available"
     static let kAddToMonitor = "You can choose to add the bus for monitoring in main page."
+    
+    static let kDestinationAlreadySet = "A destination has already been set"
+    static let kPleaseTurnOffCurrentDestination = "Please turn off the current destination alarm first if you want to set this one instead"
 
 }
