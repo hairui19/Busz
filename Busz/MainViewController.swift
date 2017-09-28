@@ -22,6 +22,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     fileprivate var isBusArrivalTab = true
     fileprivate var buses : [BusForDisplay] = []
+    fileprivate var currentDestination : BusForDisplay?
     
     //private let apiClient = APIClient.share
     private let fileReader = FileReader.share
@@ -42,6 +43,7 @@ class MainViewController: UIViewController {
         }else{
             buses = Utility.readBusesForDestinations()
         }
+        collectionView.reloadData()
     }
     
     private func setUpClicksOnImages(){
@@ -117,7 +119,11 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
             return cell
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.kDestinationCell, for: indexPath) as! DestinationCell
-        cell.busForDisplay = buses[indexPath.row]
+        if indexPath.section == 1{
+            cell.busForDisplay = buses[indexPath.row]
+        }else{
+            cell.busForDisplay = Utility.readAlarmBusStop()
+        }
         return cell
     }
     
