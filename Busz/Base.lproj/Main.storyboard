@@ -213,9 +213,21 @@
                                     <constraint firstAttribute="height" constant="85" id="PkT-uD-TEk"/>
                                 </constraints>
                             </pickerView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="778-nN-9Ed">
+                                <rect key="frame" x="107" y="567" width="200" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="J8H-oN-gYg"/>
+                                    <constraint firstAttribute="width" constant="200" id="iJ1-4x-EhX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Turn Off Alarm">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="778-nN-9Ed" firstAttribute="centerX" secondItem="hC9-Oo-VHw" secondAttribute="centerX" id="3Tl-hG-khV"/>
                             <constraint firstItem="pPZ-ys-WAr" firstAttribute="top" secondItem="5xx-h3-1Fy" secondAttribute="bottom" constant="40" id="5YY-i7-nu9"/>
                             <constraint firstItem="Swt-ii-4TO" firstAttribute="trailing" secondItem="5xx-h3-1Fy" secondAttribute="trailing" id="D7M-o6-oCH"/>
                             <constraint firstItem="Mu7-au-mky" firstAttribute="leading" secondItem="hC9-Oo-VHw" secondAttribute="leading" id="FLM-BB-AOu"/>
@@ -223,6 +235,7 @@
                             <constraint firstItem="Swt-ii-4TO" firstAttribute="leading" secondItem="5xx-h3-1Fy" secondAttribute="leading" id="MwT-sX-w4p"/>
                             <constraint firstItem="pPZ-ys-WAr" firstAttribute="top" secondItem="Mu7-au-mky" secondAttribute="bottom" id="QMh-zV-SQD"/>
                             <constraint firstItem="Mu7-au-mky" firstAttribute="top" secondItem="Qwi-9f-Jzy" secondAttribute="bottom" id="TfL-mY-cRZ"/>
+                            <constraint firstItem="778-nN-9Ed" firstAttribute="centerY" secondItem="Cn1-qx-5tu" secondAttribute="centerY" id="aMd-Cv-YkX"/>
                             <constraint firstItem="5xx-h3-1Fy" firstAttribute="centerX" secondItem="hC9-Oo-VHw" secondAttribute="centerX" id="ayn-5w-Yuv"/>
                             <constraint firstAttribute="trailing" secondItem="Mu7-au-mky" secondAttribute="trailing" id="nYf-fv-gzn"/>
                         </constraints>
@@ -233,6 +246,7 @@
                         <outlet property="destinationTextfield" destination="ns0-nU-BSj" id="Toh-Jj-Box"/>
                         <outlet property="mapView" destination="Mu7-au-mky" id="dqH-xk-a4M"/>
                         <outlet property="setAlarmButton" destination="59S-jC-Nl4" id="r5r-I2-cvA"/>
+                        <outlet property="turnOffAlarmButton" destination="778-nN-9Ed" id="BYO-87-veu"/>
                         <outlet property="whiteBox" destination="5xx-h3-1Fy" id="T74-Ci-twW"/>
                         <outlet property="whiteBoxBottomContraint" destination="5YY-i7-nu9" id="evT-Hz-Lt2"/>
                     </connections>

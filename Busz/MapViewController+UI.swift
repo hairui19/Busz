@@ -15,6 +15,7 @@ extension MapViewController{
     func setupUI(){
         setWhiteBox()
         setPicker()
+        setTurnOffAlarmUI()
     }
     
     fileprivate func setWhiteBox(){
@@ -29,6 +30,17 @@ extension MapViewController{
         destinationPicker.delegate = self
         destinationPicker.dataSource = self
         destinationPicker.isHidden = true
+    }
+    
+    fileprivate func setTurnOffAlarmUI(){
+        turnOffAlarmButton.backgroundColor = .white
+        turnOffAlarmButton.layer.cornerRadius = 5
+        turnOffAlarmButton.layer.shadowRadius = 5
+        turnOffAlarmButton.layer.shadowColor = UIColor.lightGray.cgColor
+        turnOffAlarmButton.layer.shadowOpacity = 1
+        turnOffAlarmButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+        turnOffAlarmButton.clipsToBounds = false
+        turnOffAlarmButton.layer.masksToBounds = false
     }
     
 }
