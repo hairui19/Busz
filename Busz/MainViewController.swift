@@ -21,6 +21,7 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     fileprivate var isBusArrivalTab = true
+    fileprivate var buses : [BusForDisplay] = []
     
     //private let apiClient = APIClient.share
     private let fileReader = FileReader.share
@@ -31,6 +32,7 @@ class MainViewController: UIViewController {
         setupUI()
         setUpClicksOnImages()
         pullToRefresh()
+        buses = Utility.readBusesForArrivals()
     }
     
     private func setUpClicksOnImages(){
@@ -69,6 +71,7 @@ class MainViewController: UIViewController {
     }
     
     func refresh(){
+        collectionView.reloadData()
         collectionView.refreshControl?.endRefreshing()
     }
 }
@@ -79,15 +82,17 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return buses.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if isBusArrivalTab{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.kBusArrivalCell, for: indexPath) as! BusArrivalCell
+            cell.busForDisplay = buses[indexPath.row]
+            
             return cell
         }
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.kDestinationCell, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.kDestinationCell, for: indexPath) as! DestinationCell
         return cell
     }
     
