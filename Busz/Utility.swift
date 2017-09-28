@@ -96,12 +96,12 @@ struct Utility {
     static func readBusesForDestinations() -> [BusForDisplay]{
         let realm = try! Realm()
         let busesForDestinations = realm.objects(BusForDestinations.self).sorted(by: { (first, second) -> Bool in
-            return first.timeStamp < second.timeStamp
+            return first.timeStamp > second.timeStamp
         })
         var busesForDisplay = [BusForDisplay]()
         if busesForDestinations.count == 0 {return busesForDisplay}
         for busForDestination in busesForDestinations{
-            let busForDisplay = BusForDisplay(busNumber: busForDestination.busStopName, busStopCode: busForDestination.busStopCode, busStopName: busForDestination.busStopName)
+            let busForDisplay = BusForDisplay(busNumber: busForDestination.busNumber, busStopCode: busForDestination.busStopCode, busStopName: busForDestination.busStopName)
             busesForDisplay.append(busForDisplay)
         }
         return busesForDisplay
@@ -121,33 +121,46 @@ struct Utility {
         return nil
     }
     
-    static func saveBusForAlarmBusStop(busNumber : String, busStopCode : String, busStopName : String, latitude : Double, longtitude : Double){
-        DispatchQueue.global(qos: .background).async {
-            let realm = try! Realm()
-            let busesForAlarmBusStop = realm.objects(BusForAlarmBusStop.self)
-            if busesForAlarmBusStop.count > 0 {
-                return
-            }
-            let busForAlarmBusStop = BusForAlarmBusStop()
-            busForAlarmBusStop.busNumber = busNumber
-            busForAlarmBusStop.busStopCode = busStopCode
-            busForAlarmBusStop.busStopName = busStopName
-            busForAlarmBusStop.latitude = latitude
-            busForAlarmBusStop.longtitude = longtitude
-            busForAlarmBusStop.timeStamp = Date().timeIntervalSince1970
-            try! realm.write {
-                realm.add(busForAlarmBusStop)
-            }
-        }
-    }
-    
-    static func removeBusForAlarmBusStop(){
+    static func saveBusForAlarmBusStop(busNumber : String, busStopCode : String, busStopName : String, latitude : Double, longtitude : Double, viewController : UIViewController) -> Bool {
         let realm = try! Realm()
         let busesForAlarmBusStop = realm.objects(BusForAlarmBusStop.self)
-        if !(busesForAlarmBusStop.count > 0) {return}
-        try! realm.write {
-            realm.add(busesForAlarmBusStop)
+        if busesForAlarmBusStop.count > 0 {
+            Utility.showAlert(in: viewController, title: Strings.kDestinationAlreadySet, message: Strings.kPleaseTurnOffCurrentDestination)
+            return false
         }
+        let busForAlarmBusStop = BusForAlarmBusStop()
+        busForAlarmBusStop.busNumber = busNumber
+        busForAlarmBusStop.busStopCode = busStopCode
+        busForAlarmBusStop.busStopName = busStopName
+        busForAlarmBusStop.latitude = latitude
+        busForAlarmBusStop.longtitude = longtitude
+        busForAlarmBusStop.timeStamp = Date().timeIntervalSince1970
+        try! realm.write {
+            realm.add(busForAlarmBusStop)
+        }
+        return true
+    }
+    
+    static func readAlarmBusStop() -> BusForDisplay?{
+        let realm = try! Realm()
+        let busesForAlarmBusStop = realm.objects(BusForAlarmBusStop.self)
+        if !(busesForAlarmBusStop.count > 0) {return nil}
+        let busForAlarmBusStop = busesForAlarmBusStop[0]
+        return BusForDisplay(busNumber: busForAlarmBusStop.busNumber, busStopCode: busForAlarmBusStop.busStopCode, busStopName: busForAlarmBusStop.busStopName)
+    }
+    
+    static func archiveBusForAlarmBusStop() -> Bool{
+        let realm = try! Realm()
+        let busesForAlarmBusStop = realm.objects(BusForAlarmBusStop.self)
+        if !(busesForAlarmBusStop.count > 0) {return false}
+        
+        let busStopForAlarmBusStop = busesForAlarmBusStop[0]
+        Utility.saveBusForDestinations(busNumber: busStopForAlarmBusStop.busNumber, busStopCode: busStopForAlarmBusStop.busStopCode, busStopName: busStopForAlarmBusStop.busStopName, latitude: busStopForAlarmBusStop.latitude, longtitude: busStopForAlarmBusStop.longtitude)
+        
+        try! realm.write {
+            realm.delete(busesForAlarmBusStop)
+        }
+        return true
     }
     
     static func readAlarmBusStopAnnotation(busNumer : String)-> AlarmBusStopAnnotation?{
