@@ -16,6 +16,16 @@ class DestinationCell: UICollectionViewCell {
     
     @IBOutlet weak var busStopCode: UILabel!
     
+    
+    var busForDisplay : BusForDisplay?{
+        didSet{
+            busNumberLabel.text = "Bus \(busForDisplay!.busNumber)"
+            busStopNameLabel.text = busForDisplay?.busStopName
+            busStopCode.text = busForDisplay?.busStopCode
+        }
+    }
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         

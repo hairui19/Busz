@@ -43,19 +43,27 @@ class MainViewController: UIViewController {
         let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(destinationTapped))
         pastDestinationsImageView.addGestureRecognizer(tapGesture1)
         pastDestinationsImageView.isUserInteractionEnabled = true
+        
     }
     
     func arrivalTimesTapped(){
         isBusArrivalTab = true
         arrivalTimesImageView.image = UIImage(named: "arrivalTimesTapped")
+        arrivalTimesImageView.isUserInteractionEnabled = false
+        pastDestinationsImageView.isUserInteractionEnabled = true
         pastDestinationsImageView.image = UIImage(named: "pastDestinations")
+         buses = Utility.readBusesForArrivals()
         collectionView.reloadData()
+       
     }
     
     func destinationTapped(){
         isBusArrivalTab = false
         arrivalTimesImageView.image = UIImage(named: "arrivalTimes")
+        arrivalTimesImageView.isUserInteractionEnabled = true
+        pastDestinationsImageView.isUserInteractionEnabled = false
         pastDestinationsImageView.image = UIImage(named: "destinationsTapped")
+        buses = Utility.readBusesForDestinations()
         collectionView.reloadData()
     }
     
@@ -93,6 +101,7 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
             return cell
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Identifiers.kDestinationCell, for: indexPath) as! DestinationCell
+        cell.busForDisplay = buses[indexPath.row]
         return cell
     }
     
