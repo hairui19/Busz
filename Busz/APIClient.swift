@@ -97,7 +97,39 @@ class APIClient {
                 }
                 
             })
-        
     }
+    
+    func getBusArrivalTimeForDisplay(busStopCode : String, serviceNo : String, busStopName : String) -> Observable<String?>{
+        let params = [
+            "BusStopCode" : busStopCode,
+            "ServiceNo" : serviceNo
+        ]
+        return request(endpoint: busArrivalTimeEndpoint, params: params)
+            .map({ dataDic -> String? in
+                guard let services = dataDic["Services"] as? [Any],
+                    services.count > 0,
+                    let nextBus = services[0] as? [String : Any],
+                    let nextBusInfo = nextBus["NextBus"] as? [String : Any],
+                    let estimatedArrival = nextBusInfo["EstimatedArrival"] as? String else{
+                        return nil
+                }
+                let arrivalTime = estimatedArrival
+                let dateFormatter = ISO8601DateFormatter()
+                let date: Date? = dateFormatter.date(from: arrivalTime)
+                if let theArrivingDate = date{
+                    let arrivingTime = theArrivingDate.offsetFrom(date: Date())
+                    if arrivingTime == ""{
+                        return ""
+                    }else{
+                        return arrivingTime
+                    }
+                }else{
+                    return nil
+                }
+                
+            })
+    }
+    
+    
 }
 
