@@ -54,7 +54,7 @@ struct Utility {
         }
     }
     
-    static func saveBusForDestinations(busNumber : String, busStopCode : String, busStopName : String){
+    static func saveBusForDestinations(busNumber : String, busStopCode : String, busStopName : String, latitude : Double, longtitude : Double){
         DispatchQueue.global(qos: .background).async {
             let realm = try! Realm()
             let busesForDestinations = realm.objects(BusForDestinations.self).sorted(by: { (first, second) -> Bool in
@@ -65,6 +65,8 @@ struct Utility {
             busDestination.busNumber = busNumber
             busDestination.busStopCode = busStopCode
             busDestination.busStopName = busStopName
+            busDestination.latitude = latitude
+            busDestination.longtitude = longtitude
             busDestination.timeStamp = Date().timeIntervalSince1970
             
             try! realm.write {
@@ -104,5 +106,60 @@ struct Utility {
         }
         return busesForDisplay
     }
+    
+    static func readDestionationAnnotation(busNumer : String)-> DestinationBusStopAnnotation?{
+        let realm = try! Realm()
+        let busesForDestinations = realm.objects(BusForDestinations.self).sorted(by: { (first, second) -> Bool in
+            return first.timeStamp < second.timeStamp
+        })
+        if busesForDestinations.count == 0 {return nil}
+        for busForDestination in busesForDestinations{
+            if busForDestination.busNumber == busNumer{
+                return DestinationBusStopAnnotation(title: busForDestination.busStopName, busStopCode: busForDestination.busStopCode, coordinate: (busForDestination.latitude, busForDestination.longtitude))
+            }
+        }
+        return nil
+    }
+    
+    static func saveBusForAlarmBusStop(busNumber : String, busStopCode : String, busStopName : String, latitude : Double, longtitude : Double){
+        DispatchQueue.global(qos: .background).async {
+            let realm = try! Realm()
+            let busesForAlarmBusStop = realm.objects(BusForAlarmBusStop.self)
+            if busesForAlarmBusStop.count > 0 {
+                return
+            }
+            let busForAlarmBusStop = BusForAlarmBusStop()
+            busForAlarmBusStop.busNumber = busNumber
+            busForAlarmBusStop.busStopCode = busStopCode
+            busForAlarmBusStop.busStopName = busStopName
+            busForAlarmBusStop.latitude = latitude
+            busForAlarmBusStop.longtitude = longtitude
+            busForAlarmBusStop.timeStamp = Date().timeIntervalSince1970
+            try! realm.write {
+                realm.add(busForAlarmBusStop)
+            }
+        }
+    }
+    
+    static func removeBusForAlarmBusStop(){
+        let realm = try! Realm()
+        let busesForAlarmBusStop = realm.objects(BusForAlarmBusStop.self)
+        if !(busesForAlarmBusStop.count > 0) {return}
+        try! realm.write {
+            realm.add(busesForAlarmBusStop)
+        }
+    }
+    
+    static func readAlarmBusStopAnnotation(busNumer : String)-> AlarmBusStopAnnotation?{
+        let realm = try! Realm()
+        let busesForAlarmBusStop = realm.objects(BusForAlarmBusStop.self)
+        if !(busesForAlarmBusStop.count > 0) {return nil}
+        let busForAlarmBusStop = busesForAlarmBusStop[0]
+        if busForAlarmBusStop.busNumber == busNumer {
+            return AlarmBusStopAnnotation(title: busForAlarmBusStop.busStopName, busStopCode: busForAlarmBusStop.busStopCode, coordinate: (busForAlarmBusStop.latitude, busForAlarmBusStop.longtitude))
+        }
+        return nil
+    }
+
     
 }
