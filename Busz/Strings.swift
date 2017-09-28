@@ -21,5 +21,6 @@ struct Strings {
     static let kChooseABus = "Choose A Bus"
     static let kTryAgainlater = "Please try again later"
     static let kArrivalDataNotAvailable = "Arrival data is NOT available"
+    static let kAddToMonitor = "You can choose to add the bus for monitoring in main page."
 
 }
