@@ -197,7 +197,7 @@ extension MapViewController{
         
         Observable.zip(estimatedTimeObservable, chosenBusForTimeArrivalCheckObservable) { [weak self](estimatedTimeMessage, chosenBusStopAnnotation) -> Void in
             if let estimatedTimeMessage = estimatedTimeMessage{
-                Utility.showAlert(in: self!, title: estimatedTimeMessage, message: "something", addAction: {
+                Utility.showAlert(in: self!, title: estimatedTimeMessage, message: Strings.kAddToMonitor, addAction: {
                     Utility.saveBusForArrival(busNumber: (self!.chosenBus.value?.busNumber)!, busStopCode: (chosenBusStopAnnotation?.subtitle)!, busStopName: (chosenBusStopAnnotation?.title)!)
                 })
             }else{
