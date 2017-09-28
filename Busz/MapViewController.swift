@@ -18,11 +18,10 @@ import RealmSwift
 class MapViewController: UIViewController {
     
     // MARK: - Properties
-    let realm = try! Realm()
     fileprivate let normalBusStops = Variable<[BusStop]>([])
     fileprivate let destinationsDescrip = Variable<[String]>([])
     fileprivate let destinationAnnotationManager = Variable<DestinationAnnotationManager>(DestinationAnnotationManager())
-    fileprivate let chosenDestination = Variable<DestinationBusStopAnnotation?>(nil)
+    fileprivate let pastDestination = Variable<DestinationBusStopAnnotation?>(nil)
     fileprivate let chosenBusStopForTimeArrivalCheck = Variable<BusStopAnnotation?>(nil)
     
     let disposeBag = DisposeBag()
@@ -44,6 +43,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var whiteBoxBottomContraint: NSLayoutConstraint!
     
     @IBOutlet weak var setAlarmButton: UIButton!
+    @IBOutlet weak var turnOffAlarmButton: UIButton!
     
     // MARK: - Life Cycle Functions
     override func viewDidLoad() {
@@ -75,7 +75,7 @@ class MapViewController: UIViewController {
     
     // MARK: - Helper Functions
     fileprivate func loadData(routeNumber : String){
-        
+        self.turnOffAlarmButton.isHidden = true
         chosenBus
             .asObservable()
             .filter{return ($0 != nil)}
@@ -84,6 +84,9 @@ class MapViewController: UIViewController {
                 self?.fileReader.route(number: routeNumber, bus: bus!)
                     .bind(to: self!.updatedBus)
                     .addDisposableTo(self!.disposeBag)
+                
+                // read destination from
+                self?.pastDestination.value = Utility.readDestionationAnnotation(busNumer: bus!.busNumber)
             })
             .addDisposableTo(disposeBag)
     }
@@ -112,6 +115,9 @@ class MapViewController: UIViewController {
         mapView.removeAnnotations(annotations)
         
     }
+    fileprivate func loadDestination(){
+        
+    }
     
 }
 
@@ -123,8 +129,11 @@ extension MapViewController{
         bindingUI()
     }
     fileprivate func bindingData(){
-        chosenBus
+        
+        let chosenBusObservable = chosenBus
             .asObservable()
+        
+        chosenBusObservable
             .subscribe(onNext: {[weak self] bus in
                 if let bus = bus{
                     self?.navigationItem.title =  "Bus \(bus.busNumber) - Route \(Strings.kRouteOne)"
@@ -136,6 +145,32 @@ extension MapViewController{
                     self?.navigationItem.title = Strings.kChooseABus
                     self?.navigationItem.rightBarButtonItem = nil
                 }
+            })
+            .addDisposableTo(disposeBag)
+        
+//        chosenBusObservable
+//            .map{ _ in return true}
+//            .subscribe(onNext: { [weak self] status  in
+//                if status == true {
+//                    self?.chosenDestination
+//                        .asObservable()
+//                        .filter{return $0 != nil}
+//                        .subscribe(onNext: { [weak self] alarmDestinationAnnotatin in
+//                            self?.mapView.removeAnnotation((self?.busStopAnnotationFromAlarmBusStopAnnotation(alarmDestinationAnnotatin!))!)
+//                            self?.mapView.addAnnotation(alarmDestinationAnnotatin!)
+//                            self?.whiteBox.isHidden = true
+//                            self?.turnOffAlarmButton.isHidden = false
+//                        })
+//                        .addDisposableTo(self!.disposeBag)
+//                }
+//            })
+//            .addDisposableTo(disposeBag)
+//        
+        pastDestination
+            .asObservable()
+            .filter{return $0 != nil}
+            .subscribe(onNext: { [weak self] destinationBusStopAnnotation in
+                self?.destinationAnnotationManager.value.currentDestionationAnnotation = destinationBusStopAnnotation
             })
             .addDisposableTo(disposeBag)
         
@@ -204,7 +239,6 @@ extension MapViewController{
                 Utility.showAlert(in: self!, title: Strings.kArrivalDataNotAvailable, message: Strings.kTryAgainlater)
             }
         }
-            .debug()
             .subscribe()
             .addDisposableTo(disposeBag)
         
@@ -298,8 +332,10 @@ extension MapViewController{
         
         
         // if there is destination marker, place it.
-        finishedPlacingNormalAnnotationsObservable
+        let finishedPlacingDestinationAnnotaitonObservable = finishedPlacingNormalAnnotationsObservable
             .asObservable()
+        
+        finishedPlacingDestinationAnnotaitonObservable
             .subscribe(onNext: { [weak self] (finishedPlaceingNormalAnnotaitons) in
                 if finishedPlaceingNormalAnnotaitons{
                     self?.updatedBus
@@ -310,7 +346,7 @@ extension MapViewController{
                         })
                         .filter{return ($0 != nil)}
                         .map({ destinationBusStop -> DestinationBusStopAnnotation in
-                             return DestinationBusStopAnnotation(title: destinationBusStop!.name, busStopCode: destinationBusStop!.busStopCode, coordinate: destinationBusStop!.coordinate)
+                            return DestinationBusStopAnnotation(title: destinationBusStop!.name, busStopCode: destinationBusStop!.busStopCode, coordinate: destinationBusStop!.coordinate)
                         })
                         .subscribe(onNext: { [weak self] destinationBusStopAnnotation in
                             self?.destinationAnnotationManager.value.currentDestionationAnnotation = destinationBusStopAnnotation
@@ -319,6 +355,11 @@ extension MapViewController{
                 }
             })
             .addDisposableTo(disposeBag)
+        
+//        
+//        finishedPlacingDestinationAnnotaitonObservable
+//            .map{_ in return true}
+//            .sub
         
         
         // adding polyline for routes
@@ -377,7 +418,6 @@ extension MapViewController{
                 return manager.currentDestionationAnnotation
             }
             .subscribe(onNext: { [weak self] destinationAnnotaiton in
-                self?.chosenDestination.value = destinationAnnotaiton
                 self?.destinationTextfield.text = destinationAnnotaiton?.title ?? ""
             })
             .addDisposableTo(disposeBag)
@@ -406,7 +446,37 @@ extension MapViewController{
         setAlarmButton.rx.controlEvent(.touchUpInside)
             .asObservable()
             .subscribe(onNext: {[weak self] _ in
-                
+                self?.whiteBox.isHidden = true
+                self?.turnOffAlarmButton.isHidden = false
+            })
+            .addDisposableTo(disposeBag)
+        
+        turnOffAlarmButton.rx.controlEvent(.touchUpInside)
+            .asObservable()
+            .subscribe(onNext: { [weak self] _ in
+                self?.whiteBox.isHidden = false
+                self?.turnOffAlarmButton.isHidden = true
+            })
+            .addDisposableTo(disposeBag)
+        
+        setAlarmButton.rx.controlEvent(.touchUpInside)
+            .asObservable()
+            .subscribe(onNext: {[weak self] _ in
+                if let destinationAnnotation = self?.destinationAnnotationManager.value.currentDestionationAnnotation{
+                    Utility.saveBusForDestinations(busNumber: (self?.chosenBus.value?.busNumber)!,
+                                                   busStopCode: destinationAnnotation.busStopCode,
+                                                   busStopName: destinationAnnotation.title!,
+                                                   latitude: destinationAnnotation.coordinate.latitude,
+                                                   longtitude: destinationAnnotation.coordinate.longitude)
+                }
+                self?.startMonitoring()
+            })
+            .addDisposableTo(disposeBag)
+        
+        turnOffAlarmButton.rx.controlEvent(.touchUpInside)
+            .asObservable()
+            .subscribe(onNext: { [weak self] _ in
+                self?.stopMonitoring()
             })
             .addDisposableTo(disposeBag)
     }
@@ -418,9 +488,19 @@ extension MapViewController{
                     return busStopAnnotation
                 }
             }
-            
         }
         return BusStopAnnotation(title: destionationAnnotation.title ?? "", busStopCode: destionationAnnotation.busStopCode , coordinate: (destionationAnnotation.coordinate.latitude, destionationAnnotation.coordinate.longitude))
+    }
+    
+    func busStopAnnotationFromAlarmBusStopAnnotation(_ alarmBusStopAnnotation : AlarmBusStopAnnotation) -> BusStopAnnotation {
+        for annotion in mapView.annotations{
+            if let busStopAnnotation = annotion as? BusStopAnnotation{
+                if busStopAnnotation.subtitle == alarmBusStopAnnotation.subtitle{
+                    return busStopAnnotation
+                }
+            }
+        }
+        return BusStopAnnotation(title: alarmBusStopAnnotation.title ?? "", busStopCode: alarmBusStopAnnotation.busStopCode , coordinate: (alarmBusStopAnnotation.coordinate.latitude, alarmBusStopAnnotation.coordinate.longitude))
     }
 }
 
@@ -526,6 +606,16 @@ extension MapViewController : MKMapViewDelegate {
                 view = DestinationBusStopPinView(annotation: annotation, reuseIdentifier: identifier)
             }
             return view
+        }else if let annotation = annotation as? AlarmBusStopAnnotation{
+            let identifier = Identifiers.kAlarmBusStopAnnotationView
+            var view : AlarmBusStopPinView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? AlarmBusStopPinView{
+                dequeuedView.annotation = annotation
+                view = dequeuedView
+            }else{
+                view = AlarmBusStopPinView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            return view
         }
         
         return nil
@@ -570,7 +660,7 @@ extension MapViewController : MKMapViewDelegate {
 //MARK: GeoFencing - CLLocationManagerDelegate
 extension MapViewController : CLLocationManagerDelegate{
     func monitoringRegion(_ destinationBusStop : DestinationBusStopAnnotation)->CLCircularRegion{
-        let region = CLCircularRegion(center: destinationBusStop.coordinate, radius: notificationRadius, identifier: Identifiers.kMonitoringRegion)
+        let region = CLCircularRegion(center: destinationBusStop.coordinate, radius: notificationRadius, identifier: (chosenBus.value?.busNumber)!)
         region.notifyOnEntry = true
         region.notifyOnExit = false
         return region
@@ -589,13 +679,12 @@ extension MapViewController : CLLocationManagerDelegate{
         if let destinationBusStop = destinationAnnotationManager.value.currentDestionationAnnotation{
             let region = monitoringRegion(destinationBusStop)
             locationManager.startMonitoring(for: region)
-            
         }
     }
     
     func stopMonitoring() {
         for region in locationManager.monitoredRegions {
-            guard let circularRegion = region as? CLCircularRegion, circularRegion.identifier == Identifiers.kMonitoringRegion else { continue }
+            guard let circularRegion = region as? CLCircularRegion, circularRegion.identifier == (chosenBus.value?.busNumber)! else { continue }
             locationManager.stopMonitoring(for: circularRegion)
         }
     }
