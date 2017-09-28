@@ -54,6 +54,7 @@ class MapViewController: UIViewController {
         addNotifications()
         addTapToDismissEditingGesture()
         initializingMap()
+        binding()
         
     }
     
@@ -63,7 +64,7 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let chosenBUs = chosenBus.value{
+        if chosenBus.value != nil{
             self.whiteBox.isHidden = false
             self.turnOffAlarmButton.isHidden = true
         }
@@ -109,7 +110,8 @@ class MapViewController: UIViewController {
             return true
         }
         .subscribe(onNext: { [weak self] _ in
-            self?.binding()
+            self?.bindingData()
+            self?.bindingUI()
         })
         .addDisposableTo(disposeBag)
     }
@@ -148,12 +150,12 @@ class MapViewController: UIViewController {
 extension MapViewController{
     
     fileprivate func binding(){
-        bindingData()
-        bindingUI()
+        chosenBusRelatedBinding()
     }
     
-    fileprivate func bindingData(){
-        
+    
+    fileprivate func chosenBusRelatedBinding(){
+        // these bindings are in natural sequential to loadData()
         let chosenBusObservable = chosenBus
             .asObservable()
         
@@ -182,22 +184,13 @@ extension MapViewController{
                         .subscribe(onNext: { alarmBusStopAnnotation in
                             self?.whiteBox.isHidden = true
                             self?.turnOffAlarmButton.isHidden = false
-
+                            
                         })
                         .addDisposableTo(self!.disposeBag)
                 }
             })
             .addDisposableTo(disposeBag)
         
-        pastDestination
-            .asObservable()
-            .filter{return $0 != nil}
-            .subscribe(onNext: { [weak self] destinationBusStopAnnotation in
-                self?.destinationAnnotationManager.value.currentDestionationAnnotation = destinationBusStopAnnotation
-            })
-            .addDisposableTo(disposeBag)
-        
-
         
         updatedBus
             .asObservable()
@@ -248,6 +241,83 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
+        // binding for annotation - adding annotation for bus stosp
+        let normalBusStopsObservable = normalBusStops
+            .asObservable()
+            .map { busStops -> [BusStopAnnotation] in
+                return busStops.map({ (busStop) -> BusStopAnnotation in
+                    return BusStopAnnotation(title: busStop.name, busStopCode: busStop.busStopCode, coordinate: busStop.coordinate)
+                })
+        }
+        
+        normalBusStopsObservable
+            .subscribe(onNext: { [weak self] annotations in
+                self?.removeAllAnnotations()
+                // neccessary to down cast again.
+                self?.mapView.addAnnotations(annotations)
+            })
+            .addDisposableTo(disposeBag)
+        
+        let finishedPlacingNormalAnnotationsObservable = normalBusStopsObservable
+            .map {  _ -> Bool in
+                return true
+            }
+            .startWith(false)
+        
+        
+        finishedPlacingNormalAnnotationsObservable
+            .asObservable()
+            .subscribe(onNext: { [weak self] finishPlacing in
+                if finishPlacing == true {
+                    self?.alarmBusStopVas
+                        .asObservable()
+                        .filter{return $0 != nil}
+                        .subscribe(onNext: { [weak self] alarmDestinationAnnotatin in
+                            self?.mapView.removeAnnotation((self?.busStopAnnotationFromAlarmBusStopAnnotation(alarmDestinationAnnotatin!))!)
+                            if let destinationAnnotation = self?.destinationAnnotationManager.value.currentDestionationAnnotation {
+                                self?.mapView.removeAnnotation(destinationAnnotation)
+                            }
+                            self?.mapView.addAnnotation(alarmDestinationAnnotatin!)
+                        })
+                        .addDisposableTo(self!.disposeBag)
+                }
+            })
+            .addDisposableTo(disposeBag)
+        
+        // adding polyline for routes
+        finishedPlacingNormalAnnotationsObservable
+            .asObservable()
+            .subscribe(onNext: { [weak self] (finishedPlaceingNormalAnnotaitons) in
+                self?.updatedBus
+                    .asObservable()
+                    .filter{return ($0 != nil)}
+                    .map { bus -> [CLLocationCoordinate2D] in
+                        return bus!.routes.map({ (altitude, longtitude) -> CLLocationCoordinate2D in
+                            return CLLocationCoordinate2D(latitude: altitude, longitude: longtitude)
+                        })
+                    }
+                    .subscribe(onNext: { [weak self] coordinates in
+                        var coords = coordinates
+                        let polyline = MKPolyline(coordinates: &coords, count: coords.count)
+                        self?.mapView.add(polyline)
+                    })
+                    .addDisposableTo(self!.disposeBag)
+            })
+            .addDisposableTo(disposeBag)
+
+    }
+    
+    
+    fileprivate func bindingData(){
+        
+        pastDestination
+            .asObservable()
+            .filter{return $0 != nil}
+            .subscribe(onNext: { [weak self] destinationBusStopAnnotation in
+                self?.destinationAnnotationManager.value.currentDestionationAnnotation = destinationBusStopAnnotation
+            })
+            .addDisposableTo(disposeBag)
+        
         let estimatedTimeObservable =  estimatedTime
             .asObservable()
             .skip(1)
@@ -267,7 +337,6 @@ extension MapViewController{
             .subscribe()
             .addDisposableTo(disposeBag)
         
-       
     }
     
     fileprivate func bindingUI(){
@@ -326,74 +395,6 @@ extension MapViewController{
                     
                     self?.zoomToLocation(with: CLLocationCoordinate2D(latitude: coordinateTuple.0, longitude: coordinateTuple.1))
                 }
-            })
-            .addDisposableTo(disposeBag)
-        
-        
-        
-        
-        
-        // binding for annotation - adding annotation for bus stosp
-        let normalBusStopsObservable = normalBusStops
-            .asObservable()
-            .map { busStops -> [BusStopAnnotation] in
-                return busStops.map({ (busStop) -> BusStopAnnotation in
-                    return BusStopAnnotation(title: busStop.name, busStopCode: busStop.busStopCode, coordinate: busStop.coordinate)
-                })
-            }
-        
-        normalBusStopsObservable
-            .subscribe(onNext: { [weak self] annotations in
-                self?.removeAllAnnotations()
-                // neccessary to down cast again.
-                self?.mapView.addAnnotations((annotations as! [BusStopAnnotation]))
-            })
-            .addDisposableTo(disposeBag)
-        
-        let finishedPlacingNormalAnnotationsObservable = normalBusStopsObservable
-            .map {  _ -> Bool in
-                return true
-            }
-            .startWith(false)
-        
-        
-        finishedPlacingNormalAnnotationsObservable
-            .asObservable()
-            .subscribe(onNext: { [weak self] finishPlacing in
-                if finishPlacing == true {
-                    self?.alarmBusStopVas
-                        .asObservable()
-                        .filter{return $0 != nil}
-                        .subscribe(onNext: { [weak self] alarmDestinationAnnotatin in
-                            self?.mapView.removeAnnotation((self?.busStopAnnotationFromAlarmBusStopAnnotation(alarmDestinationAnnotatin!))!)
-                            if let destinationAnnotation = self?.destinationAnnotationManager.value.currentDestionationAnnotation {
-                                self?.mapView.removeAnnotation(destinationAnnotation)
-                            }
-                            self?.mapView.addAnnotation(alarmDestinationAnnotatin!)
-                        })
-                        .addDisposableTo(self!.disposeBag)
-                }
-            })
-            .addDisposableTo(disposeBag)
-        
-        // adding polyline for routes
-        finishedPlacingNormalAnnotationsObservable
-            .asObservable()
-            .subscribe(onNext: { [weak self] (finishedPlaceingNormalAnnotaitons) in
-                self?.updatedBus
-                    .asObservable()
-                    .filter{return ($0 != nil)}
-                    .map { bus -> [CLLocationCoordinate2D] in
-                        return bus!.routes.map({ (altitude, longtitude) -> CLLocationCoordinate2D in
-                            return CLLocationCoordinate2D(latitude: altitude, longitude: longtitude)
-                        })
-                    }
-                    .subscribe(onNext: { [weak self] coordinates in
-                        var coords = coordinates
-                        let polyline = MKPolyline(coordinates: &coords, count: coords.count)
-                        self?.mapView.add(polyline)
-                    })
-                    .addDisposableTo(self!.disposeBag)
             })
             .addDisposableTo(disposeBag)
         
