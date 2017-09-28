@@ -61,19 +61,24 @@ struct Utility {
                 return first.timeStamp < second.timeStamp
             })
             
-            let busDestination = BusForDestinations()
-            busDestination.busNumber = busNumber
-            busDestination.busStopCode = busStopCode
-            busDestination.busStopName = busStopName
-            busDestination.latitude = latitude
-            busDestination.longtitude = longtitude
-            busDestination.timeStamp = Date().timeIntervalSince1970
-            
             try! realm.write {
                 if busesForDestinations.count == 5{
                     let objectToBeDeleted = busesForDestinations[0]
                     realm.delete(objectToBeDeleted)
+                }else{
+                    for busForDestination in busesForDestinations {
+                        if busNumber == busForDestination.busNumber && busStopCode == busForDestination.busStopCode{
+                            return
+                        }
+                    }
                 }
+                let busDestination = BusForDestinations()
+                busDestination.busNumber = busNumber
+                busDestination.busStopCode = busStopCode
+                busDestination.busStopName = busStopName
+                busDestination.latitude = latitude
+                busDestination.longtitude = longtitude
+                busDestination.timeStamp = Date().timeIntervalSince1970
                 realm.add(busDestination)
             }
         }
