@@ -67,9 +67,9 @@
             </constraints>
             <size key="customSize" width="398" height="135"/>
             <connections>
+                <outlet property="busCodeLabel" destination="Fqm-8D-tEB" id="zjM-cg-OTc"/>
                 <outlet property="busNumberLabel" destination="yg9-nN-O5F" id="FD6-ca-dtk"/>
                 <outlet property="busStopNameLabel" destination="xEH-wv-0LZ" id="2B9-X0-KVE"/>
-                <outlet property="bustCodeLabel" destination="Fqm-8D-tEB" id="pZU-au-ROO"/>
                 <outlet property="estArrivalLabel" destination="zsk-He-Hlx" id="vur-Ci-cbV"/>
             </connections>
             <point key="canvasLocation" x="15" y="73.5"/>
