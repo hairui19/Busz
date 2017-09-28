@@ -22,6 +22,9 @@
 		71565D221F7C213E008CDCBE /* BusForTimeArrival.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D211F7C213E008CDCBE /* BusForTimeArrival.swift */; };
 		71565D241F7C21D6008CDCBE /* BusForDestinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D231F7C21D5008CDCBE /* BusForDestinations.swift */; };
 		71565D281F7CB8B1008CDCBE /* BusForDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D271F7CB8B1008CDCBE /* BusForDisplay.swift */; };
+		71565D2A1F7CE2C4008CDCBE /* AlarmBusStopAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D291F7CE2C4008CDCBE /* AlarmBusStopAnnotation.swift */; };
+		71565D2C1F7CE300008CDCBE /* AlarmBusStopPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D2B1F7CE300008CDCBE /* AlarmBusStopPinView.swift */; };
+		71565D2E1F7CEBDB008CDCBE /* BusForAlarmBusStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71565D2D1F7CEBDB008CDCBE /* BusForAlarmBusStop.swift */; };
 		7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE051F74C7FB00CF516A /* AppDelegate.swift */; };
 		7185BE081F74C7FB00CF516A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7185BE071F74C7FB00CF516A /* MainViewController.swift */; };
 		7185BE0B1F74C7FB00CF516A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7185BE091F74C7FB00CF516A /* Main.storyboard */; };
@@ -521,6 +524,9 @@
 		71565D211F7C213E008CDCBE /* BusForTimeArrival.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusForTimeArrival.swift; sourceTree = "<group>"; };
 		71565D231F7C21D5008CDCBE /* BusForDestinations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusForDestinations.swift; sourceTree = "<group>"; };
 		71565D271F7CB8B1008CDCBE /* BusForDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusForDisplay.swift; sourceTree = "<group>"; };
+		71565D291F7CE2C4008CDCBE /* AlarmBusStopAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmBusStopAnnotation.swift; sourceTree = "<group>"; };
+		71565D2B1F7CE300008CDCBE /* AlarmBusStopPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmBusStopPinView.swift; sourceTree = "<group>"; };
+		71565D2D1F7CEBDB008CDCBE /* BusForAlarmBusStop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusForAlarmBusStop.swift; sourceTree = "<group>"; };
 		7185BE021F74C7FB00CF516A /* Busz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Busz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7185BE051F74C7FB00CF516A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7185BE071F74C7FB00CF516A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -1049,6 +1055,7 @@
 			children = (
 				71565D211F7C213E008CDCBE /* BusForTimeArrival.swift */,
 				71565D231F7C21D5008CDCBE /* BusForDestinations.swift */,
+				71565D2D1F7CEBDB008CDCBE /* BusForAlarmBusStop.swift */,
 			);
 			name = "Realm Model";
 			sourceTree = "<group>";
@@ -1553,6 +1560,7 @@
 			children = (
 				71BDE5071F78A179000C586B /* BusStopPinView.swift */,
 				71BDE50B1F78AE8D000C586B /* DestinationBusStopPinView.swift */,
+				71565D2B1F7CE300008CDCBE /* AlarmBusStopPinView.swift */,
 				71565D181F7C0625008CDCBE /* BusArrivalHeader.swift */,
 				71565D191F7C0625008CDCBE /* BusArrivalHeader.xib */,
 				7185C5F41F7588DD00CF516A /* BusSelectionCell.swift */,
@@ -1588,6 +1596,7 @@
 				71BDE50D1F79E511000C586B /* BusStops.swift */,
 				71BDE1731F77825A000C586B /* BusStopAnnotation.swift */,
 				71BDE5091F78ACCE000C586B /* DestinationBusStopAnnotation.swift */,
+				71565D291F7CE2C4008CDCBE /* AlarmBusStopAnnotation.swift */,
 				71565CFD1F7A1B4D008CDCBE /* DestinationAnnotationManager.swift */,
 			);
 			name = Models;
@@ -2233,6 +2242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71BDE5041F77CA38000C586B /* Utility.swift in Sources */,
+				71565D2A1F7CE2C4008CDCBE /* AlarmBusStopAnnotation.swift in Sources */,
 				71565D241F7C21D6008CDCBE /* BusForDestinations.swift in Sources */,
 				71565D1A1F7C0625008CDCBE /* BusArrivalHeader.swift in Sources */,
 				71BDE50E1F79E511000C586B /* BusStops.swift in Sources */,
@@ -2244,12 +2254,14 @@
 				71565D0C1F7BC176008CDCBE /* Date+Extension.swift in Sources */,
 				7185C5F61F7588DD00CF516A /* BusSelectionCell.swift in Sources */,
 				7185C5EC1F75524B00CF516A /* MapViewController+UI.swift in Sources */,
+				71565D2E1F7CEBDB008CDCBE /* BusForAlarmBusStop.swift in Sources */,
 				71565D221F7C213E008CDCBE /* BusForTimeArrival.swift in Sources */,
 				7185C5E21F754B7F00CF516A /* MapViewController.swift in Sources */,
 				71565D161F7C0152008CDCBE /* BusArrivalCell.swift in Sources */,
 				71BDE1741F77825A000C586B /* BusStopAnnotation.swift in Sources */,
 				71565D051F7AB4DA008CDCBE /* Identifiers.swift in Sources */,
 				71565D1E1F7C0AD4008CDCBE /* DestinationCell.swift in Sources */,
+				71565D2C1F7CE300008CDCBE /* AlarmBusStopPinView.swift in Sources */,
 				7185C5F11F7584DF00CF516A /* BusSelectionViewController.swift in Sources */,
 				71BDE5061F77FF4B000C586B /* CentreButtonTabBarController.swift in Sources */,
 				7185BE061F74C7FB00CF516A /* AppDelegate.swift in Sources */,
