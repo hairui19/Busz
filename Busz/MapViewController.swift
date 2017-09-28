@@ -33,7 +33,7 @@ class MapViewController: UIViewController {
     //input
     let chosenBus = Variable<Bus?>(nil)
     fileprivate let updatedBus = Variable<Bus?>(nil)
-    fileprivate let notificationRadius : CLLocationDegrees = 150
+    fileprivate let notificationRadius : CLLocationDegrees = 100
     fileprivate let estimatedTime = Variable<String?>(nil)
     
     // IBOutlets
@@ -59,6 +59,14 @@ class MapViewController: UIViewController {
     
     deinit {
         removeNotifications()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let chosenBUs = chosenBus.value{
+            self.whiteBox.isHidden = false
+            self.turnOffAlarmButton.isHidden = true
+        }
     }
     
     // MARK: IBActions.
@@ -94,8 +102,6 @@ class MapViewController: UIViewController {
                 // read destination from
                 self?.pastDestination.value = Utility.readDestionationAnnotation(busNumer: bus!.busNumber)
                 self?.alarmBusStopVas.value = Utility.readAlarmBusStopAnnotation(busNumer: bus!.busNumber)
-                print("the alarmstopvasvalue is = \(self?.alarmBusStopVas.value)")
-                print("the busname is = \(bus!.busNumber))")
             })
             .addDisposableTo(disposeBag)
         
@@ -105,6 +111,7 @@ class MapViewController: UIViewController {
         .subscribe(onNext: { [weak self] _ in
             self?.binding()
         })
+        .addDisposableTo(disposeBag)
     }
     
     fileprivate func getRowForSearchText(searchText : String) -> Int{
@@ -454,11 +461,7 @@ extension MapViewController{
         turnOffAlarmButton.rx.controlEvent(.touchUpInside)
             .asObservable()
             .subscribe(onNext: { [weak self] _ in
-                let success = Utility.archiveBusForAlarmBusStop()
-                if success {
-                    self?.whiteBox.isHidden = false
-                    self?.turnOffAlarmButton.isHidden = true
-                }
+                self?.stopMonitoring()
             })
             .addDisposableTo(disposeBag)
         
@@ -474,9 +477,13 @@ extension MapViewController{
                                                     viewController :self!)
                     if success {
                         self?.alarmBusStopVas.value = Utility.readAlarmBusStopAnnotation(busNumer: (self?.chosenBus.value?.busNumber)!)
+                        Utility.showAlert(in: self!, title: "Bus \((self?.chosenBus.value?.busNumber)!)", message: "Destionation: \(destinationAnnotation.title!)", addAction: {
+                             self?.startMonitoring()
+                            print("start monnitoring")
+                        })
+                       
                     }
                 }
-                //self?.startMonitoring()
             })
             .addDisposableTo(disposeBag)
     }
@@ -617,7 +624,6 @@ extension MapViewController : MKMapViewDelegate {
             }
             return view
         }
-        print("wtfs?")
         return nil
     }
     
@@ -678,36 +684,34 @@ extension MapViewController : CLLocationManagerDelegate{
         
         if let destinationBusStop = destinationAnnotationManager.value.currentDestionationAnnotation{
             let region = monitoringRegion(destinationBusStop)
+            locationManager.startUpdatingLocation()
             locationManager.startMonitoring(for: region)
+            print("the number of monitored regions = \(locationManager.monitoredRegions.count)")
         }
+        
     }
     
     func stopMonitoring() {
+         print("the number of monitored regions = \(locationManager.monitoredRegions.count)")
         for region in locationManager.monitoredRegions {
             guard let circularRegion = region as? CLCircularRegion, circularRegion.identifier == (chosenBus.value?.busNumber)! else { continue }
             locationManager.stopMonitoring(for: circularRegion)
         }
-    }
-    
-    func addNotification(){
-        let notificationContent = UNMutableNotificationContent()
-        notificationContent.title = Strings.kAttention
-        notificationContent.body = Strings.kAlmostArrived
-        notificationContent.sound = UNNotificationSound.default()
-        let timeScheduleNotification = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
-    
-        let notificationRequest = UNNotificationRequest(identifier: Identifiers.kLocationNotification, content: notificationContent, trigger: timeScheduleNotification)
-        UNUserNotificationCenter.current().add(notificationRequest, withCompletionHandler: nil)
+        let success = Utility.archiveBusForAlarmBusStop()
+        if success {
+            self.whiteBox.isHidden = false
+            self.turnOffAlarmButton.isHidden = true
+        }
     }
     
     func removeNotification(){
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [Identifiers.kLocationNotification])
     }
 
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        addNotification()
-        stopMonitoring()
-    }
+//    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+//        addNotification()
+//        stopMonitoring()
+//    }
 }
 
 

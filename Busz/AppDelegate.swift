@@ -53,7 +53,29 @@ extension AppDelegate: CLLocationManagerDelegate, UNUserNotificationCenterDelega
         completionHandler([.sound, .badge,.alert])
     }
     
-
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        addNotification()
+    }
+    
+    func stopMonitoring() {
+        print("the number of monitored regions = \(locationManager.monitoredRegions.count)")
+        for region in locationManager.monitoredRegions {
+            guard let circularRegion = region as? CLCircularRegion else { return }
+            locationManager.stopMonitoring(for: circularRegion)
+        }
+        _ = Utility.archiveBusForAlarmBusStop()
+    }
+    
+    func addNotification(){
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = Strings.kAttention
+        notificationContent.body = Strings.kAlmostArrived
+        notificationContent.sound = UNNotificationSound.init(named: "default-alarm")
+        let timeScheduleNotification = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+        
+        let notificationRequest = UNNotificationRequest(identifier: Identifiers.kLocationNotification, content: notificationContent, trigger: timeScheduleNotification)
+        UNUserNotificationCenter.current().add(notificationRequest, withCompletionHandler: nil)
+    }
     
 }
 
