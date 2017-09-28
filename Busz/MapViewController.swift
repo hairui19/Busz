@@ -22,6 +22,7 @@ class MapViewController: UIViewController {
     fileprivate let destinationsDescrip = Variable<[String]>([])
     fileprivate let destinationAnnotationManager = Variable<DestinationAnnotationManager>(DestinationAnnotationManager())
     fileprivate let pastDestination = Variable<DestinationBusStopAnnotation?>(nil)
+    fileprivate let alarmBusStopVas = Variable<AlarmBusStopAnnotation?>(nil)
     fileprivate let chosenBusStopForTimeArrivalCheck = Variable<BusStopAnnotation?>(nil)
     
     let disposeBag = DisposeBag()
@@ -53,7 +54,7 @@ class MapViewController: UIViewController {
         addNotifications()
         addTapToDismissEditingGesture()
         initializingMap()
-        binding()
+        
     }
     
     deinit {
@@ -75,11 +76,16 @@ class MapViewController: UIViewController {
     
     // MARK: - Helper Functions
     fileprivate func loadData(routeNumber : String){
-        self.turnOffAlarmButton.isHidden = true
-        chosenBus
+      
+        let observable = chosenBus
             .asObservable()
             .filter{return ($0 != nil)}
-            .subscribe(onNext: {[weak self] bus in
+        
+        observable
+            .subscribe(onNext: { [weak self] bus in
+                self?.destinationAnnotationManager.value.currentDestionationAnnotation = nil
+                self?.destinationAnnotationManager.value.previousDestionationAnnotation = nil
+                self?.turnOffAlarmButton.isHidden = true
                 self?.navigationItem.title =  "Bus \(bus!.busNumber) - Route \(routeNumber)"
                 self?.fileReader.route(number: routeNumber, bus: bus!)
                     .bind(to: self!.updatedBus)
@@ -87,8 +93,18 @@ class MapViewController: UIViewController {
                 
                 // read destination from
                 self?.pastDestination.value = Utility.readDestionationAnnotation(busNumer: bus!.busNumber)
+                self?.alarmBusStopVas.value = Utility.readAlarmBusStopAnnotation(busNumer: bus!.busNumber)
+                print("the alarmstopvasvalue is = \(self?.alarmBusStopVas.value)")
+                print("the busname is = \(bus!.busNumber))")
             })
             .addDisposableTo(disposeBag)
+        
+        observable.map { _ -> Bool in
+            return true
+        }
+        .subscribe(onNext: { [weak self] _ in
+            self?.binding()
+        })
     }
     
     fileprivate func getRowForSearchText(searchText : String) -> Int{
@@ -128,6 +144,7 @@ extension MapViewController{
         bindingData()
         bindingUI()
     }
+    
     fileprivate func bindingData(){
         
         let chosenBusObservable = chosenBus
@@ -148,24 +165,23 @@ extension MapViewController{
             })
             .addDisposableTo(disposeBag)
         
-//        chosenBusObservable
-//            .map{ _ in return true}
-//            .subscribe(onNext: { [weak self] status  in
-//                if status == true {
-//                    self?.chosenDestination
-//                        .asObservable()
-//                        .filter{return $0 != nil}
-//                        .subscribe(onNext: { [weak self] alarmDestinationAnnotatin in
-//                            self?.mapView.removeAnnotation((self?.busStopAnnotationFromAlarmBusStopAnnotation(alarmDestinationAnnotatin!))!)
-//                            self?.mapView.addAnnotation(alarmDestinationAnnotatin!)
-//                            self?.whiteBox.isHidden = true
-//                            self?.turnOffAlarmButton.isHidden = false
-//                        })
-//                        .addDisposableTo(self!.disposeBag)
-//                }
-//            })
-//            .addDisposableTo(disposeBag)
-//        
+        chosenBusObservable
+            .map{ _ in return true}
+            .subscribe(onNext: { [weak self] status  in
+                if status == true {
+                    self?.alarmBusStopVas
+                        .asObservable()
+                        .filter{return ($0 != nil)}
+                        .subscribe(onNext: { alarmBusStopAnnotation in
+                            self?.whiteBox.isHidden = true
+                            self?.turnOffAlarmButton.isHidden = false
+
+                        })
+                        .addDisposableTo(self!.disposeBag)
+                }
+            })
+            .addDisposableTo(disposeBag)
+        
         pastDestination
             .asObservable()
             .filter{return $0 != nil}
@@ -173,6 +189,8 @@ extension MapViewController{
                 self?.destinationAnnotationManager.value.currentDestionationAnnotation = destinationBusStopAnnotation
             })
             .addDisposableTo(disposeBag)
+        
+
         
         updatedBus
             .asObservable()
@@ -320,7 +338,8 @@ extension MapViewController{
         normalBusStopsObservable
             .subscribe(onNext: { [weak self] annotations in
                 self?.removeAllAnnotations()
-                self?.mapView.addAnnotations(annotations)
+                // neccessary to down cast again.
+                self?.mapView.addAnnotations((annotations as! [BusStopAnnotation]))
             })
             .addDisposableTo(disposeBag)
         
@@ -331,36 +350,24 @@ extension MapViewController{
             .startWith(false)
         
         
-        // if there is destination marker, place it.
-        let finishedPlacingDestinationAnnotaitonObservable = finishedPlacingNormalAnnotationsObservable
+        finishedPlacingNormalAnnotationsObservable
             .asObservable()
-        
-        finishedPlacingDestinationAnnotaitonObservable
-            .subscribe(onNext: { [weak self] (finishedPlaceingNormalAnnotaitons) in
-                if finishedPlaceingNormalAnnotaitons{
-                    self?.updatedBus
+            .subscribe(onNext: { [weak self] finishPlacing in
+                if finishPlacing == true {
+                    self?.alarmBusStopVas
                         .asObservable()
-                        .filter{return ($0 != nil)}
-                        .map({ bus -> BusStop? in
-                            return bus!.busStops.destinationBusStop
-                        })
-                        .filter{return ($0 != nil)}
-                        .map({ destinationBusStop -> DestinationBusStopAnnotation in
-                            return DestinationBusStopAnnotation(title: destinationBusStop!.name, busStopCode: destinationBusStop!.busStopCode, coordinate: destinationBusStop!.coordinate)
-                        })
-                        .subscribe(onNext: { [weak self] destinationBusStopAnnotation in
-                            self?.destinationAnnotationManager.value.currentDestionationAnnotation = destinationBusStopAnnotation
+                        .filter{return $0 != nil}
+                        .subscribe(onNext: { [weak self] alarmDestinationAnnotatin in
+                            self?.mapView.removeAnnotation((self?.busStopAnnotationFromAlarmBusStopAnnotation(alarmDestinationAnnotatin!))!)
+                            if let destinationAnnotation = self?.destinationAnnotationManager.value.currentDestionationAnnotation {
+                                self?.mapView.removeAnnotation(destinationAnnotation)
+                            }
+                            self?.mapView.addAnnotation(alarmDestinationAnnotatin!)
                         })
                         .addDisposableTo(self!.disposeBag)
                 }
             })
             .addDisposableTo(disposeBag)
-        
-//        
-//        finishedPlacingDestinationAnnotaitonObservable
-//            .map{_ in return true}
-//            .sub
-        
         
         // adding polyline for routes
         finishedPlacingNormalAnnotationsObservable
@@ -443,19 +450,15 @@ extension MapViewController{
             .addDisposableTo(disposeBag)
 
         // use a button to set
-        setAlarmButton.rx.controlEvent(.touchUpInside)
-            .asObservable()
-            .subscribe(onNext: {[weak self] _ in
-                self?.whiteBox.isHidden = true
-                self?.turnOffAlarmButton.isHidden = false
-            })
-            .addDisposableTo(disposeBag)
         
         turnOffAlarmButton.rx.controlEvent(.touchUpInside)
             .asObservable()
             .subscribe(onNext: { [weak self] _ in
-                self?.whiteBox.isHidden = false
-                self?.turnOffAlarmButton.isHidden = true
+                let success = Utility.archiveBusForAlarmBusStop()
+                if success {
+                    self?.whiteBox.isHidden = false
+                    self?.turnOffAlarmButton.isHidden = true
+                }
             })
             .addDisposableTo(disposeBag)
         
@@ -463,20 +466,17 @@ extension MapViewController{
             .asObservable()
             .subscribe(onNext: {[weak self] _ in
                 if let destinationAnnotation = self?.destinationAnnotationManager.value.currentDestionationAnnotation{
-                    Utility.saveBusForDestinations(busNumber: (self?.chosenBus.value?.busNumber)!,
+                    let success = Utility.saveBusForAlarmBusStop(busNumber: (self?.chosenBus.value?.busNumber)!,
                                                    busStopCode: destinationAnnotation.busStopCode,
                                                    busStopName: destinationAnnotation.title!,
                                                    latitude: destinationAnnotation.coordinate.latitude,
-                                                   longtitude: destinationAnnotation.coordinate.longitude)
+                                                   longtitude: destinationAnnotation.coordinate.longitude,
+                                                    viewController :self!)
+                    if success {
+                        self?.alarmBusStopVas.value = Utility.readAlarmBusStopAnnotation(busNumer: (self?.chosenBus.value?.busNumber)!)
+                    }
                 }
-                self?.startMonitoring()
-            })
-            .addDisposableTo(disposeBag)
-        
-        turnOffAlarmButton.rx.controlEvent(.touchUpInside)
-            .asObservable()
-            .subscribe(onNext: { [weak self] _ in
-                self?.stopMonitoring()
+                //self?.startMonitoring()
             })
             .addDisposableTo(disposeBag)
     }
@@ -617,7 +617,7 @@ extension MapViewController : MKMapViewDelegate {
             }
             return view
         }
-        
+        print("wtfs?")
         return nil
     }
     
