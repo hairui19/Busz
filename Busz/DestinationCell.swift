@@ -19,16 +19,26 @@ class DestinationCell: UICollectionViewCell {
     
     var busForDisplay : BusForDisplay?{
         didSet{
-            busNumberLabel.text = "Bus \(busForDisplay!.busNumber)"
-            busStopNameLabel.text = busForDisplay?.busStopName
-            busStopCode.text = busForDisplay?.busStopCode
+            if let bus = busForDisplay{
+                busNumberLabel.text = "Bus \(bus.busNumber)"
+                busStopNameLabel.text = bus.busStopName
+                busStopCode.text = bus.busStopCode
+            }
         }
+    }
+    
+    override func prepareForReuse() {
+        busNumberLabel.text = ""
+        busStopNameLabel.text = ""
+        busStopCode.text = ""
     }
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        busNumberLabel.text = ""
+        busStopNameLabel.text = ""
+        busStopCode.text = ""
         busNumberLabel.textColor = Colors.mediumPuprple
         busStopNameLabel.textColor = Colors.mediumPuprple
         busStopCode.textColor = Colors.mediumPuprple
