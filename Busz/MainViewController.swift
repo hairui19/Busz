@@ -32,7 +32,16 @@ class MainViewController: UIViewController {
         setupUI()
         setUpClicksOnImages()
         pullToRefresh()
-        buses = Utility.readBusesForArrivals()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isBusArrivalTab{
+            buses = Utility.readBusesForArrivals()
+        }else{
+            buses = Utility.readBusesForDestinations()
+        }
     }
     
     private func setUpClicksOnImages(){
@@ -52,7 +61,7 @@ class MainViewController: UIViewController {
         arrivalTimesImageView.isUserInteractionEnabled = false
         pastDestinationsImageView.isUserInteractionEnabled = true
         pastDestinationsImageView.image = UIImage(named: "pastDestinations")
-         buses = Utility.readBusesForArrivals()
+        buses = Utility.readBusesForArrivals()
         collectionView.reloadData()
        
     }
@@ -86,10 +95,17 @@ class MainViewController: UIViewController {
 
 extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        if isBusArrivalTab {
+            return 1
+        }else{
+            return 2
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 && !isBusArrivalTab{
+            return 1
+        }
         return buses.count
     }
     
@@ -119,8 +135,13 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
             headerview.titleLabel.text = "Arrival Time"
             headerview.titleLabel.textColor = Colors.heavyPurple
         }else{
-            headerview.titleLabel.text = "Past Destinations"
-             headerview.titleLabel.textColor = Colors.mediumPuprple
+            if indexPath.section == 0 {
+                headerview.titleLabel.text = "Current Destination"
+            }else{
+                headerview.titleLabel.text = "Past Destinations"
+                
+            }
+            headerview.titleLabel.textColor = Colors.mediumPuprple
         }
         return headerview
     }
