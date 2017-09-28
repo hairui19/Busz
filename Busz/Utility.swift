@@ -85,7 +85,7 @@ struct Utility {
         var busesForDisplay = [BusForDisplay]()
         if busesForTimeArrival.count == 0 {return busesForDisplay}
         for busForTimeArrival in busesForTimeArrival{
-            let busForDisplay = BusForDisplay(busNumber: busForTimeArrival.busStopName, busStopCode: busForTimeArrival.busStopCode, busStopName: busForTimeArrival.busStopName)
+            let busForDisplay = BusForDisplay(busNumber: busForTimeArrival.busNumber, busStopCode: busForTimeArrival.busStopCode, busStopName: busForTimeArrival.busStopName)
             busesForDisplay.append(busForDisplay)
         }
         return busesForDisplay
