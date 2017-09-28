@@ -25,7 +25,6 @@ class BusArrivalCell: UICollectionViewCell {
             busCodeLabel.text = busForDisplay?.busStopCode
             apiClient.getBusArrivalTimeForDisplay(busStopCode: (busForDisplay?.busStopCode)!, serviceNo: (busForDisplay?.busNumber)!, busStopName: (busForDisplay?.busStopName)!)
             .asObservable()
-            .debug()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] estimatedTimeMessage in
                 if let estimatedTimeMessage = estimatedTimeMessage {
