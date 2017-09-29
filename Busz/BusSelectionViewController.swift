@@ -38,6 +38,9 @@ class BusSelectionViewController: UIViewController {
         collectionView.register(UINib(nibName: "BusSelectionCell", bundle: nil), forCellWithReuseIdentifier: busSelectionCell)
     }
 
+    @IBAction func crossButtonPressed(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 //MARK: - RXSwift and RxCocoa
@@ -84,8 +87,8 @@ extension BusSelectionViewController : UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let bus = buses.value[indexPath.row]
         view.endEditing(true)
+        let bus = buses.value[indexPath.row]
         if let delegate = delegate {
             delegate.didFinishChoosingBus(bus)
         }else{
