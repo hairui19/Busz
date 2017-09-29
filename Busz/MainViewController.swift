@@ -26,6 +26,7 @@ class MainViewController: UIViewController {
     
     //private let apiClient = APIClient.share
     private let fileReader = FileReader.share
+    var loadedSplashScreen = false
     
     //MARK: - Life Cycle Functions
     override func viewDidLoad() {

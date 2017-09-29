@@ -16,8 +16,10 @@ extension MainViewController{
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        addingASimpleSplashScreen{
-            print("hello world")
+        if !loadedSplashScreen{
+            addingASimpleSplashScreen{[weak self] in
+                self?.loadedSplashScreen = true
+            }
         }
     }
     
