@@ -18,7 +18,7 @@ class BusSelectionCell: UICollectionViewCell {
         self.backgroundColor = .white
         self.layer.cornerRadius = 10
         self.layer.shadowRadius = 5
-        self.layer.shadowColor = UIColor.lightGray.cgColor
+        self.layer.shadowColor = Colors.heavyBlue.cgColor
         self.layer.shadowOpacity = 1
         self.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.clipsToBounds = false
