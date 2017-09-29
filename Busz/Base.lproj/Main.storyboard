@@ -141,6 +141,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="0.094117647060000004" green="0.23137254900000001" blue="0.34901960780000002" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </tabBar>
                     <connections>
                         <segue destination="s2w-Z5-lqZ" kind="relationship" relationship="viewControllers" id="3Ft-Q7-hAt"/>
@@ -327,11 +332,11 @@
             </objects>
             <point key="canvasLocation" x="3042.0289855072465" y="36.684782608695656"/>
         </scene>
-        <!--Main-->
+        <!--Home-->
         <scene sceneID="4gG-oa-aqX">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="s2w-Z5-lqZ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Main" id="W5y-0h-fii"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="homeTabIcon" id="W5y-0h-fii"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sFo-O3-MtR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -350,7 +355,7 @@
         <scene sceneID="T50-uV-MDU">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7zL-Ng-RYi" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Map" id="V0o-Xq-kaU"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="mapTabIcon" id="V0o-Xq-kaU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="G4M-5E-oWe">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -369,6 +374,8 @@
     <resources>
         <image name="arrivalTimes" width="124" height="148"/>
         <image name="cross" width="36" height="36"/>
+        <image name="homeTabIcon" width="27" height="23"/>
+        <image name="mapTabIcon" width="35" height="27"/>
         <image name="pastDestinations" width="124" height="147"/>
     </resources>
 </document>
