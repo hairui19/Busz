@@ -61,24 +61,29 @@ struct Utility {
                 return first.timeStamp < second.timeStamp
             })
             
-            try! realm.write {
-                if busesForDestinations.count == 5{
-                    let objectToBeDeleted = busesForDestinations[0]
-                    realm.delete(objectToBeDeleted)
-                }else{
-                    for busForDestination in busesForDestinations {
-                        if busNumber == busForDestination.busNumber && busStopCode == busForDestination.busStopCode{
-                            return
-                        }
+            for busForDestination in busesForDestinations {
+                if busForDestination.busNumber == busNumber && busForDestination.busStopCode == busStopCode{
+                    try! realm.write {
+                        busForDestination.timeStamp = Date().timeIntervalSince1970
                     }
+                    return
                 }
-                let busDestination = BusForDestinations()
-                busDestination.busNumber = busNumber
-                busDestination.busStopCode = busStopCode
-                busDestination.busStopName = busStopName
-                busDestination.latitude = latitude
-                busDestination.longtitude = longtitude
-                busDestination.timeStamp = Date().timeIntervalSince1970
+            }
+            
+            if busesForDestinations.count == 5{
+                try! realm.write {
+                    realm.delete(busesForDestinations[0])
+                }
+            }
+            
+            let busDestination = BusForDestinations()
+            busDestination.busNumber = busNumber
+            busDestination.busStopCode = busStopCode
+            busDestination.busStopName = busStopName
+            busDestination.latitude = latitude
+            busDestination.longtitude = longtitude
+            busDestination.timeStamp = Date().timeIntervalSince1970
+            try! realm.write {
                 realm.add(busDestination)
             }
         }
@@ -178,6 +183,6 @@ struct Utility {
         }
         return nil
     }
-
+    
     
 }
