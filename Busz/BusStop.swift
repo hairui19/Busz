@@ -27,7 +27,7 @@ struct BusStop {
         
         self.busStopCode = busStopCode
         self.name = name
-        self.coordinate = (altitude,longitude)
+        self.coordinate = ((altitude * 10000000).rounded(.down)/10000000,(longitude * 10000000).rounded(.down)/10000000)
     }
     
 }
