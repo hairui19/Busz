@@ -13,6 +13,9 @@ import CoreLocation
 
 extension MapViewController{
     func setupUI(){
+        self.navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.barTintColor = Colors.heavyBlue
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         setWhiteBox()
         setPicker()
         setTurnOffAlarmUI()
