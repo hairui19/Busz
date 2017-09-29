@@ -499,7 +499,7 @@ extension MapViewController{
                                                     viewController :self!)
                     if success {
                         self?.alarmBusStopVas.value = Utility.readAlarmBusStopAnnotation(busNumer: (self?.chosenBus.value?.busNumber)!)
-                        Utility.showAlert(in: self!, title: "Bus \((self?.chosenBus.value?.busNumber)!)", message: "Destionation: \(destinationAnnotation.title!)", addAction: {
+                        Utility.showAlert(in: self!, title: "Bus \((self?.chosenBus.value?.busNumber)!)", message: "Destionation: \(destinationAnnotation.title!)", okAction: {
                              self?.startMonitoring()
                             print("start monnitoring")
                         })

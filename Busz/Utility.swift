@@ -31,6 +31,15 @@ struct Utility {
         viewController.present(alertViewController, animated: true, completion: nil)
     }
     
+    static func showAlert(in viewController : UIViewController, title : String, message : String, okAction : @escaping ()->()){
+        let alertViewController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let addAction = UIAlertAction(title: "Ok", style: .default) { action in
+            okAction()
+        }
+        alertViewController.addAction(addAction)
+        viewController.present(alertViewController, animated: true, completion: nil)
+    }
+    
     static func saveBusForArrival(busNumber : String, busStopCode : String, busStopName : String){
         DispatchQueue.global(qos: .background).async {
             let realm = try! Realm()
