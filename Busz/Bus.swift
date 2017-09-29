@@ -16,9 +16,6 @@ struct Bus {
     var routes : Array<(CLLocationDegrees , CLLocationDegrees)> = []
     var busStops : BusStops = BusStops()
     
-    static let dummyBus = Bus(json: [
-            "no" : "dummyBusNo"
-        ])!
     
     init?(json : [String : Any]) {
         // busNumber essential data
