@@ -24,9 +24,9 @@ extension BusSelectionViewController{
     }
     
     fileprivate func setSearchBarUI(){
-        searchBar.barTintColor = Colors.lightGreen
-        searchBar.layer.borderColor = UIColor.clear.cgColor
-        searchBar.layer.shadowColor = UIColor.clear.cgColor
+//        searchBar.barTintColor = Colors.lightGreen
+//        searchBar.layer.borderColor = UIColor.clear.cgColor
+//        searchBar.layer.shadowColor = UIColor.clear.cgColor
     }
     
     
