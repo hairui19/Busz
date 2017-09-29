@@ -36,11 +36,20 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rightArrowIconP" translatesAutoresizingMaskIntoConstraints="NO" id="eV6-UT-fNY">
+                        <rect key="frame" x="339" y="72" width="18" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="CYB-Nb-lxd"/>
+                            <constraint firstAttribute="width" constant="18" id="vQZ-Ps-Qci"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="QJz-M2-WF6" firstAttribute="centerX" secondItem="CAS-Ib-A5r" secondAttribute="centerX" id="0tY-hi-h5I"/>
                 <constraint firstItem="CAS-Ib-A5r" firstAttribute="top" secondItem="EN5-p6-scH" secondAttribute="bottom" constant="2" id="79H-nK-2fn"/>
+                <constraint firstItem="eV6-UT-fNY" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="GHd-3k-INr"/>
+                <constraint firstAttribute="trailing" secondItem="eV6-UT-fNY" secondAttribute="trailing" constant="10" id="Oi0-dq-zW3"/>
                 <constraint firstItem="QJz-M2-WF6" firstAttribute="top" secondItem="CAS-Ib-A5r" secondAttribute="bottom" constant="2" id="PmL-LR-AJg"/>
                 <constraint firstItem="CAS-Ib-A5r" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="T32-WP-6pT"/>
                 <constraint firstItem="EN5-p6-scH" firstAttribute="centerX" secondItem="CAS-Ib-A5r" secondAttribute="centerX" id="hdr-3b-Dad"/>
@@ -51,8 +60,12 @@
                 <outlet property="busNumberLabel" destination="EN5-p6-scH" id="DjX-Tl-bsI"/>
                 <outlet property="busStopCode" destination="QJz-M2-WF6" id="JJL-Cd-6mA"/>
                 <outlet property="busStopNameLabel" destination="CAS-Ib-A5r" id="MAs-KQ-uRX"/>
+                <outlet property="rightArrowIcon" destination="eV6-UT-fNY" id="vbh-CF-mUt"/>
             </connections>
-            <point key="canvasLocation" x="17" y="101"/>
+            <point key="canvasLocation" x="16.5" y="100.5"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="rightArrowIconP" width="12" height="18"/>
+    </resources>
 </document>

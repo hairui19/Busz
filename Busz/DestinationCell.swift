@@ -16,6 +16,7 @@ class DestinationCell: UICollectionViewCell {
     
     @IBOutlet weak var busStopCode: UILabel!
     
+    @IBOutlet weak var rightArrowIcon: UIImageView!
     
     var busForDisplay : BusForDisplay?{
         didSet{
@@ -23,7 +24,13 @@ class DestinationCell: UICollectionViewCell {
                 busNumberLabel.text = "Bus \(bus.busNumber)"
                 busStopNameLabel.text = bus.busStopName
                 busStopCode.text = bus.busStopCode
+                rightArrowIcon.isHidden = false
+                self.isUserInteractionEnabled = true
+            }else{
+                self.isUserInteractionEnabled = false
+                rightArrowIcon.isHidden = true
             }
+            
         }
     }
     
