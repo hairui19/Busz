@@ -12,6 +12,7 @@ import UIKit
 
 extension MainViewController{
     func setupUI(){
+        self.navigationItem.title = "Busz"
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.barTintColor = Colors.heavyBlue
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
