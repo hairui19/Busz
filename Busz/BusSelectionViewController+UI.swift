@@ -18,9 +18,9 @@ extension BusSelectionViewController{
     fileprivate func setCollectionViewUI(){
         collectionView.delegate = self
         collectionView.dataSource = self
-        let image = UIImage(named: "busSelectionBG")
-        let imageView = UIImageView(image: image)
-        collectionView.backgroundView = imageView
+//        let image = UIImage(named: "busSelectionBG")
+//        let imageView = UIImageView(image: image)
+//        collectionView.backgroundView = imageView
     }
     
     fileprivate func setSearchBarUI(){
