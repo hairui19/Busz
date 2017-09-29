@@ -8,9 +8,31 @@
 
 import Foundation
 import UIKit
+import CBZSplashView
 
 
 extension MainViewController{
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addingASimpleSplashScreen{
+            print("hello world")
+        }
+    }
+    
+    func addingASimpleSplashScreen(_ completion : @escaping ()->()){
+        let currentWindow = UIApplication.shared.keyWindow
+        let icon = UIImage(named: "BuszIcon")
+        let splashView = CBZSplashView.init(icon: icon, backgroundColor: Colors.heavyBlue)
+        splashView?.animationDuration = 1.4
+        currentWindow?.addSubview(splashView!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+            splashView?.startAnimation()
+            completion()
+        })
+    }
+    
     func setupUI(){
         self.navigationItem.title = "Busz"
         self.navigationController?.navigationBar.barStyle = .black
