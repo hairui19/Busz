@@ -10,5 +10,6 @@ target 'Busz' do
   pod 'RxCocoa',    '~> 3.0'
   pod "VHBoomMenuButton/Swift"
   pod 'RealmSwift'
+  pod 'CBZSplashView', '~> 1.0.0'
 
 end

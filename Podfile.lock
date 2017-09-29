@@ -1,4 +1,5 @@
 PODS:
+  - CBZSplashView (1.0.0)
   - Realm (2.10.0):
     - Realm/Headers (= 2.10.0)
   - Realm/Headers (2.10.0)
@@ -10,18 +11,20 @@ PODS:
   - VHBoomMenuButton/Swift (2.0.0)
 
 DEPENDENCIES:
+  - CBZSplashView (~> 1.0.0)
   - RealmSwift
   - RxCocoa (~> 3.0)
   - RxSwift (~> 3.0)
   - VHBoomMenuButton/Swift
 
 SPEC CHECKSUMS:
+  CBZSplashView: 9ce4cba22024476ff4a97d6433e7347da6376016
   Realm: 98b3a25643cf6b3e07d2b99fb43fe0eb9c801dec
   RealmSwift: 34073ad3a31232bbaf7c0db898c037940284cba2
   RxCocoa: 84a08739ab186248c7f31ce4ee92d6f8a947d690
   RxSwift: f9de85ea20cd2f7716ee5409fc13523dc638e4e4
   VHBoomMenuButton: 77a7ae6742220b57b54eec28183fc123a3dd98ed
 
-PODFILE CHECKSUM: a8ca408ef020ec0b5bb0d5c3b3c335b0d091f411
+PODFILE CHECKSUM: cc6085d3918e2fe43f40bbdf11d6f39b558c8e68
 
 COCOAPODS: 1.3.1
