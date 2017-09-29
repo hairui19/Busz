@@ -155,5 +155,20 @@ extension MainViewController : UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: 70, height: 60)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var selectedBus : BusForDisplay
+        if indexPath.section == 0 {
+            selectedBus = Utility.readAlarmBusStop()!
+        }else{
+            selectedBus = buses[indexPath.row]
+        }
+        
+        let bus = Bus(json: ["no" : selectedBus.busNumber])
+        let navigationController = self.tabBarController?.viewControllers?[2] as! UINavigationController
+        let mapViewController = navigationController.viewControllers[0] as! MapViewController
+        mapViewController.chosenBus.value = bus
+        self.tabBarController?.selectedIndex = 2
+    }
 }
 
