@@ -169,9 +169,15 @@ class MapViewController: UIViewController {
                         .filter{return $0 != nil}
                         .subscribe(onNext: { [weak self] alarmDestinationAnnotatin in
                             print("add alarmannotaion")
-                            self?.mapView.removeAnnotation((self?.busStopAnnotationFromAlarmBusStopAnnotation(alarmDestinationAnnotatin!))!)
-                            if let destinationAnnotation = self?.destinationAnnotationManager.value.currentDestionationAnnotation {
-                                self?.mapView.removeAnnotation(destinationAnnotation)
+                            for annotation in self!.mapView.annotations{
+                                if let annotation = annotation as? BusStopAnnotation{
+                                    if annotation.busStopCode == alarmDestinationAnnotatin?.busStopCode{
+                                        self?.mapView.removeAnnotation(annotation)
+                                        break
+                                    }
+                                }else if let annotation = annotation as? DestinationBusStopAnnotation{
+                                    self?.mapView.removeAnnotation(annotation)
+                                }
                             }
                             self?.mapView.addAnnotation(alarmDestinationAnnotatin!)
                         })
@@ -484,6 +490,7 @@ extension MapViewController{
             .asObservable()
             .subscribe(onNext: { [weak self] _ in
                 self?.stopMonitoring()
+                self?.updateAlarmBusStopAnnotationAfterStoppingMonitoring()
             })
             .addDisposableTo(disposeBag)
         
@@ -508,6 +515,16 @@ extension MapViewController{
                 }
             })
             .addDisposableTo(disposeBag)
+    }
+    
+    func updateAlarmBusStopAnnotationAfterStoppingMonitoring(){
+        for annotaion in mapView.annotations{
+            if let annotaion = annotaion as? AlarmBusStopAnnotation{
+                let busStopAnnotation = busStopAnnotationFromAlarmBusStopAnnotation(annotaion)
+                mapView.removeAnnotation(annotaion)
+                mapView.addAnnotation(busStopAnnotation)
+            }
+        }
     }
     
     func busStopAnnotationFromDestionationAnnotation(_ destionationAnnotation : DestinationBusStopAnnotation) -> BusStopAnnotation{
