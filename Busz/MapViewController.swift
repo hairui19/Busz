@@ -555,10 +555,12 @@ extension MapViewController{
 extension MapViewController{
     fileprivate func addNotifications(){
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     fileprivate func removeNotifications(){
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     func keyboardWillShow(notification : NSNotification){
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
@@ -569,6 +571,13 @@ extension MapViewController{
             })
             
         }
+    }
+    func keyboardWillHide(notification : NSNotification){
+        addAnimation(animationTime : 0.5, layoutChanges: { [weak self] in
+            self?.whiteBoxBottomContraint.constant = 40
+            self?.view.layoutIfNeeded()
+            
+        })
     }
 }
 
