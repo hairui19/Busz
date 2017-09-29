@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // setup location mananger
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()
         
         // setup local notification.
@@ -70,8 +71,8 @@ extension AppDelegate: CLLocationManagerDelegate, UNUserNotificationCenterDelega
         let notificationContent = UNMutableNotificationContent()
         notificationContent.title = Strings.kAttention
         notificationContent.body = Strings.kAlmostArrived
-        notificationContent.sound = UNNotificationSound.init(named: "default-alarm")
-        let timeScheduleNotification = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+        notificationContent.sound = UNNotificationSound.init(named: "default-alarm.caf")
+        let timeScheduleNotification = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         
         let notificationRequest = UNNotificationRequest(identifier: Identifiers.kLocationNotification, content: notificationContent, trigger: timeScheduleNotification)
         UNUserNotificationCenter.current().add(notificationRequest, withCompletionHandler: nil)

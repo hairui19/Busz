@@ -252,6 +252,7 @@ extension MapViewController{
             .asObservable()
         
         chosenBusObservable
+            
             .subscribe(onNext: {[weak self] bus in
                 if let bus = bus{
                     self?.navigationItem.title =  "Bus \(bus.busNumber) - Route \(Strings.kRouteOne)"
@@ -735,6 +736,7 @@ extension MapViewController : CLLocationManagerDelegate{
             locationManager.startUpdatingLocation()
             locationManager.startMonitoring(for: region)
             print("the number of monitored regions = \(locationManager.monitoredRegions.count)")
+            print("teh area for monitoing is = \(destinationBusStop.title)")
         }
         
     }
