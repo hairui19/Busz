@@ -147,6 +147,7 @@ class MapViewController: UIViewController {
                     self?.mapView.addAnnotations(annotations)
                 }
                 
+                self?.destinationAnnotationManager.value.currentDestionationAnnotation = self?.pastDestination.value
                 
             })
             .addDisposableTo(disposeBag)
@@ -322,33 +323,21 @@ extension MapViewController{
             .bind(to: normalBusStops)
             .addDisposableTo(disposeBag)
         
-        busObservable
-            .map{bus -> BusStop? in
-                return bus!.busStops.destinationBusStop
-            }
-            .filter({return ($0 != nil)})
-            .subscribe(onNext: { [weak self] destinationBusStop in
-                let destionationAnnotation = DestinationBusStopAnnotation(title: destinationBusStop!.name, busStopCode: destinationBusStop!.busStopCode, coordinate: destinationBusStop!.coordinate)
-                self?.destinationAnnotationManager.value.update(destionationAnnotation)
-            })
-            .addDisposableTo(disposeBag)
+//        pastDestination
+//            .asObservable()
+//            .filter{return $0 != nil}
+//            .subscribe(onNext: { [weak self] destinationBusStopAnnotation in
+//                print("setting destinatin bus stop")
+//                
+//            })
+//            .addDisposableTo(disposeBag)
         
-        
-        
-  
-
     }
     
     
     fileprivate func bindingData(){
         
-        pastDestination
-            .asObservable()
-            .filter{return $0 != nil}
-            .subscribe(onNext: { [weak self] destinationBusStopAnnotation in
-                self?.destinationAnnotationManager.value.currentDestionationAnnotation = destinationBusStopAnnotation
-            })
-            .addDisposableTo(disposeBag)
+    
         
         let estimatedTimeObservable =  estimatedTime
             .asObservable()
